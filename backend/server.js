@@ -3,6 +3,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const passport = require('passport');
+const { body, validationResult } = require('express-validator');
 
 const app = express();
 const PORT = process.env.PORT || 5001;
@@ -56,13 +57,72 @@ app.get('/api/recipes/:id', async (req, res) => {
 });
 
 // POST new recipe (protected route - requires authentication)
-app.post('/api/recipes', auth, async (req, res) => {
-  const { title, image, description, ingredients, instructions, tips } = req.body;
-
-  // Basic validation
-  if (!title || !description) {
-    return res.status(400).json({ message: "Title and Description are required" });
+app.post('/api/recipes', [
+  auth,
+  // Validation rules
+  body('title')
+    .trim()
+    .notEmpty().withMessage('Recipe title is required')
+    .isLength({ min: 3, max: 100 }).withMessage('Title must be between 3 and 100 characters'),
+  body('image')
+    .trim()
+    .notEmpty().withMessage('Recipe image URL is required')
+    .isURL().withMessage('Please provide a valid image URL'),
+  body('description')
+    .trim()
+    .notEmpty().withMessage('Recipe description is required')
+    .isLength({ min: 10, max: 1000 }).withMessage('Description must be between 10 and 1000 characters'),
+  body('ingredients')
+    .optional()
+    .isArray().withMessage('Ingredients must be an array')
+    .custom((value) => {
+      if (value && value.length > 0) {
+        return value.every(item => typeof item === 'string' && item.trim().length > 0);
+      }
+      return true;
+    }).withMessage('Each ingredient must be a non-empty string'),
+  body('instructions')
+    .optional()
+    .isArray().withMessage('Instructions must be an array')
+    .custom((value) => {
+      if (value && value.length > 0) {
+        return value.every(item => typeof item === 'string' && item.trim().length > 0);
+      }
+      return true;
+    }).withMessage('Each instruction must be a non-empty string'),
+  body('tips')
+    .optional()
+    .trim()
+    .isLength({ max: 500 }).withMessage('Tips must not exceed 500 characters'),
+  body('prepTime')
+    .optional()
+    .trim()
+    .isLength({ max: 50 }).withMessage('Prep time must not exceed 50 characters'),
+  body('cookTime')
+    .optional()
+    .trim()
+    .isLength({ max: 50 }).withMessage('Cook time must not exceed 50 characters'),
+  body('servings')
+    .optional()
+    .trim()
+    .isLength({ max: 50 }).withMessage('Servings must not exceed 50 characters'),
+  body('difficulty')
+    .optional()
+    .isIn(['Easy', 'Medium', 'Hard']).withMessage('Difficulty must be Easy, Medium, or Hard')
+], async (req, res) => {
+  // Check for validation errors
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ 
+      message: 'Validation failed',
+      errors: errors.array().map(err => ({
+        field: err.path,
+        message: err.msg
+      }))
+    });
   }
+
+  const { title, image, description, ingredients, instructions, tips, prepTime, cookTime, servings, difficulty } = req.body;
 
   try {
     // Get user info
@@ -75,6 +135,10 @@ app.post('/api/recipes', auth, async (req, res) => {
       ingredients, // Expecting array
       instructions, // Expecting array
       tips,
+      prepTime,
+      cookTime,
+      servings,
+      difficulty,
       userId: req.userId,
       userName: user ? user.name : 'Anonymous'
     });
