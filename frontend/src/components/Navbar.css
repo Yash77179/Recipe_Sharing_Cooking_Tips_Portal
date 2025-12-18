@@ -2,6 +2,7 @@
     padding: 2rem 0;
     background-color: #fff;
     border-bottom: 1px solid var(--color-border);
+    position: relative;
 }
 
 .navbar-content {
@@ -13,8 +14,8 @@
 
 .navbar-top {
     width: 100%;
-    display: grid;
-    grid-template-columns: 1fr auto 1fr;
+    display: flex;
+    justify-content: center;
     align-items: center;
 }
 
@@ -29,7 +30,12 @@
 }
 
 .nav-actions {
-    text-align: right;
+    position: absolute;
+    top: 2rem;
+    right: 2rem;
+    display: flex;
+    gap: 1rem;
+    align-items: center;
 }
 
 .btn-text {
@@ -46,6 +52,26 @@
 
 .btn-text:hover {
     background-color: #333;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.btn-outline {
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    font-weight: 700;
+    text-transform: uppercase;
+    background-color: transparent;
+    color: #000;
+    padding: 0.8rem 1.5rem;
+    border: 2px solid #000;
+    border-radius: 30px;
+    transition: all 0.3s ease;
+}
+
+.btn-outline:hover {
+    background-color: #000;
+    color: #fff;
     transform: translateY(-2px);
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }

@@ -19,24 +19,16 @@ mongoose.connect(MONGO_URI)
   .then(() => console.log('MongoDB Connected'))
   .catch(err => console.log(err));
 
-// Schema & Model
-const recipeSchema = new mongoose.Schema({
-  title: { type: String, required: true },
-  image: { type: String, required: true },
-  description: { type: String, required: true },
-  ingredients: [String],
-  instructions: [String],
-  tips: String,
-  prepTime: { type: String, default: '15 mins' },
-  cookTime: { type: String, default: '30 mins' },
-  servings: { type: String, default: '4' },
-  difficulty: { type: String, default: 'Medium' },
-  cuisine: { type: String, default: 'Global' },
-  dietaryType: { type: String, enum: ['Veg', 'Non-Veg', 'Vegan'], default: 'Veg' },
-  createdAt: { type: Date, default: Date.now }
-});
+// Import Models
+const Recipe = require('./models/Recipe');
+const User = require('./models/User');
 
-const Recipe = mongoose.model('Recipe', recipeSchema);
+// Import Routes
+const authRoutes = require('./routes/auth');
+const { auth } = require('./middleware/auth');
+
+// Use Auth Routes
+app.use('/api/auth', authRoutes);
 
 // Routes
 
@@ -61,8 +53,8 @@ app.get('/api/recipes/:id', async (req, res) => {
   }
 });
 
-// POST new recipe
-app.post('/api/recipes', async (req, res) => {
+// POST new recipe (protected route - requires authentication)
+app.post('/api/recipes', auth, async (req, res) => {
   const { title, image, description, ingredients, instructions, tips } = req.body;
 
   // Basic validation
@@ -70,16 +62,21 @@ app.post('/api/recipes', async (req, res) => {
     return res.status(400).json({ message: "Title and Description are required" });
   }
 
-  const recipe = new Recipe({
-    title,
-    image,
-    description,
-    ingredients, // Expecting array
-    instructions, // Expecting array
-    tips
-  });
-
   try {
+    // Get user info
+    const user = await User.findById(req.userId);
+    
+    const recipe = new Recipe({
+      title,
+      image,
+      description,
+      ingredients, // Expecting array
+      instructions, // Expecting array
+      tips,
+      userId: req.userId,
+      userName: user ? user.name : 'Anonymous'
+    });
+
     const newRecipe = await recipe.save();
     res.status(201).json(newRecipe);
   } catch (err) {

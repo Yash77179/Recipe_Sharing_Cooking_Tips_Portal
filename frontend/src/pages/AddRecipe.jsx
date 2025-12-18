@@ -17,6 +17,15 @@ const AddRecipe = () => {
         difficulty: 'Medium'
     });
     const [loading, setLoading] = useState(false);
+    const [error, setError] = useState('');
+
+    // Check if user is logged in
+    React.useEffect(() => {
+        const token = localStorage.getItem('token');
+        if (!token) {
+            navigate('/login');
+        }
+    }, [navigate]);
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -25,6 +34,13 @@ const AddRecipe = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
+        setError('');
+
+        const token = localStorage.getItem('token');
+        if (!token) {
+            navigate('/login');
+            return;
+        }
 
         // Parse ingredients and instructions
         const payload = {
@@ -36,18 +52,29 @@ const AddRecipe = () => {
         try {
             const res = await fetch('http://localhost:5001/api/recipes', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
                 body: JSON.stringify(payload)
             });
 
+            const data = await res.json();
+
             if (res.ok) {
-                navigate('/');
+                navigate('/profile');
             } else {
-                alert('Failed to create recipe');
+                if (res.status === 401) {
+                    localStorage.removeItem('token');
+                    localStorage.removeItem('user');
+                    navigate('/login');
+                } else {
+                    setError(data.message || 'Failed to create recipe');
+                }
             }
         } catch (err) {
             console.error(err);
-            alert('Error connecting to server');
+            setError('Error connecting to server');
         } finally {
             setLoading(false);
         }
@@ -58,6 +85,8 @@ const AddRecipe = () => {
             <div className="form-wrapper">
                 <h1 className="form-title">Share Your Culinary Masterpiece</h1>
                 <p className="form-subtitle">Join our community of home cooks and chefs.</p>
+
+                {error && <div className="error-message">{error}</div>}
 
                 <form onSubmit={handleSubmit} className="recipe-form">
                     <div className="form-section">
