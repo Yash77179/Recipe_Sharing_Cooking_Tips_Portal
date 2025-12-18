@@ -1,19 +1,86 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
+import gsap from 'gsap';
+import { useGSAP } from '@gsap/react';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import './RecipeCard.css';
+
+gsap.registerPlugin(ScrollTrigger, useGSAP);
 
 const RecipeCard = ({ recipe }) => {
     const [liked, setLiked] = useState(false);
+    const cardRef = useRef(null);
+    const imageRef = useRef(null);
+    const titleRef = useRef(null);
 
     const toggleLike = (e) => {
         e.preventDefault(); // Prevent navigation
         setLiked(!liked);
     };
 
+    useGSAP(() => {
+        // Scroll entrance animation
+        gsap.fromTo(cardRef.current,
+            {
+                opacity: 0,
+                y: 50
+            },
+            {
+                opacity: 1,
+                y: 0,
+                duration: 0.8,
+                ease: 'power3.out',
+                scrollTrigger: {
+                    trigger: cardRef.current,
+                    start: 'top 90%',
+                    toggleActions: 'play none none none'
+                }
+            }
+        );
+    }, { scope: cardRef });
+
+    const handleMouseEnter = () => {
+        gsap.to(imageRef.current, {
+            scale: 1.1,
+            duration: 0.6,
+            ease: 'power2.out'
+        });
+        gsap.to(titleRef.current, {
+            y: -5,
+            duration: 0.4,
+            ease: 'power2.out'
+        });
+    };
+
+    const handleMouseLeave = () => {
+        gsap.to(imageRef.current, {
+            scale: 1,
+            duration: 0.6,
+            ease: 'power2.inOut'
+        });
+        gsap.to(titleRef.current, {
+            y: 0,
+            duration: 0.4,
+            ease: 'power2.inOut'
+        });
+    };
+
     return (
-        <Link to={`/recipe/${recipe._id}`} className="recipe-card">
+        <Link
+            to={`/recipe/${recipe._id}`}
+            className="recipe-card"
+            ref={cardRef}
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
+        >
             <div className="card-image-wrapper">
-                <img src={recipe.image} alt={recipe.title} className="card-image" loading="lazy" />
+                <img
+                    src={recipe.image}
+                    alt={recipe.title}
+                    className="card-image"
+                    loading="lazy"
+                    ref={imageRef}
+                />
 
                 {/* Minimalist Like Button Overlay */}
                 <button className={`like-btn ${liked ? 'liked' : ''}`} onClick={toggleLike}>
@@ -36,7 +103,7 @@ const RecipeCard = ({ recipe }) => {
                     <span className="card-difficulty">{recipe.difficulty || 'Medium'}</span>
                 </div>
 
-                <h3 className="card-title">{recipe.title}</h3>
+                <h3 className="card-title" ref={titleRef}>{recipe.title}</h3>
 
                 <div className="card-bottom-meta">
                     <span>View Recipe</span>

@@ -73,11 +73,11 @@
 
 select {
     padding: 0.8rem;
-    border: 1px solid #ddd;
+    border: 1px solid var(--color-border);
     border-radius: 8px;
     font-family: var(--font-body);
     font-size: 1rem;
-    background: white;
+    background: rgba(255, 255, 255, 0.9);
     width: 100%;
 }
 
@@ -117,9 +117,9 @@ select {
 .form-group input:focus,
 .form-group textarea:focus {
     outline: none;
-    border-color: var(--color-primary);
+    border-color: #000;
     background: #fff;
-    box-shadow: 0 0 0 3px rgba(212, 163, 115, 0.2);
+    box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.05);
 }
 
 .submit-btn {

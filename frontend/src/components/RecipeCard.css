@@ -1,18 +1,20 @@
 .recipe-card {
     display: flex;
     flex-direction: column;
-    background: white;
+    background: rgba(255, 255, 255, 0.95);
     border-radius: 16px;
     /* User requested smooth edges */
     overflow: hidden;
-    transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+    /* transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); */
+    /* Handled by GSAP */
     text-align: left;
     /* Resetting from previous center alignment for a card look */
-    border: 1px solid rgba(0, 0, 0, 0.04);
+    border: 1px solid rgba(0, 0, 0, 0.03);
 }
 
 .recipe-card:hover {
-    transform: translateY(-8px);
+    /* transform: translateY(-8px); */
+    /* Handled by GSAP if needed, but title lift and image zoom are primary */
     box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
 }
 
@@ -29,13 +31,14 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
-    transition: transform 0.7s ease;
+    /* transition: transform 0.7s ease; */
+    /* Handled by GSAP */
 }
 
-.recipe-card:hover .card-image {
+/* .recipe-card:hover .card-image {
     transform: scale(1.08);
-    /* Smoother slow zoom */
-}
+} */
+/* Handled by GSAP */
 
 /* Like Button */
 .like-btn {
@@ -135,6 +138,8 @@
     line-height: 1.3;
     color: #1a1a1a;
     margin: 0.2rem 0 0.8rem;
+    will-change: transform;
+    /* Hint for GSAP */
 }
 
 .card-bottom-meta {

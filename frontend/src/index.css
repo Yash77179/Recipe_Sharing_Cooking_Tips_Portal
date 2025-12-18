@@ -1,12 +1,15 @@
 @import url('https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap');
 
 :root {
-  --color-bg: #ffffff;
-  --color-text: #333333;
-  --color-text-light: #666666;
+  --color-bg: #fdfaf3;
+  /* Old Page / Parchment White */
+  --color-text: #2c2c2c;
+  /* Slightly softer black for readability */
+  --color-text-light: #7a7a7a;
   --color-accent: #94a3b8;
   /* Muted Slate/Sage */
-  --color-border: #e5e5e5;
+  --color-border: #ebe6d8;
+  /* Warmer border color to match parchment */
 
   --font-heading: 'Playfair Display', serif;
   --font-body: 'Lato', sans-serif;

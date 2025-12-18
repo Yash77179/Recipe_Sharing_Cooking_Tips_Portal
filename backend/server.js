@@ -113,7 +113,7 @@ app.post('/api/recipes', [
   // Check for validation errors
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
-    return res.status(400).json({ 
+    return res.status(400).json({
       message: 'Validation failed',
       errors: errors.array().map(err => ({
         field: err.path,
@@ -127,7 +127,7 @@ app.post('/api/recipes', [
   try {
     // Get user info
     const user = await User.findById(req.userId);
-    
+
     const recipe = new Recipe({
       title,
       image,

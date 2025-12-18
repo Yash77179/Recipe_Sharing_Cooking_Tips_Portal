@@ -10,14 +10,15 @@
 }
 
 .profile-info-card {
-    background: white;
+    background: rgba(255, 255, 255, 0.95);
     border-radius: 16px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
     padding: 3rem;
     display: flex;
     align-items: center;
     gap: 2rem;
     position: relative;
+    border: 1px solid var(--color-border);
 }
 
 .profile-avatar {
@@ -137,12 +138,14 @@
 }
 
 .modal-content {
-    background: white;
+    background: #fdfaf3;
+    /* Matches global bg but solid */
     border-radius: 16px;
     width: 90%;
     max-width: 500px;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
     animation: slideIn 0.3s ease;
+    border: 1px solid var(--color-border);
 }
 
 @keyframes slideIn {
@@ -150,6 +153,7 @@
         opacity: 0;
         transform: translateY(-20px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
@@ -322,9 +326,9 @@
 .no-recipes {
     text-align: center;
     padding: 4rem 2rem;
-    background: white;
+    background: rgba(255, 255, 255, 0.5);
     border-radius: 16px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    border: 1px dashed var(--color-border);
 }
 
 .no-recipes p {

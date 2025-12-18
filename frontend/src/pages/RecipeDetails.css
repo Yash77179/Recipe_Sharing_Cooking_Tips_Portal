@@ -67,7 +67,7 @@
     display: flex;
     align-items: center;
     gap: 0.8rem;
-    background: #f4f4f4;
+    background: rgba(0, 0, 0, 0.04);
     padding: 0.2rem 0.5rem;
     border-radius: 20px;
 }
@@ -107,7 +107,7 @@
 }
 
 .details-content {
-    background: #fff;
+    background: transparent;
 }
 
 .details-desc {
@@ -189,7 +189,7 @@
 }
 
 .scaling-switch button.active {
-    background: #fff;
+    background: var(--color-bg);
     color: #000;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
@@ -257,9 +257,9 @@
 .tips-section {
     margin-top: 4rem;
     padding: 2rem;
-    background: #f9f9f9;
+    background: rgba(0, 0, 0, 0.02);
     border-radius: 8px;
-    border: 1px solid #eee;
+    border: 1px solid var(--color-border);
 }
 
 .tips-section h3 {

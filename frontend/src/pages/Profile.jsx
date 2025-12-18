@@ -28,7 +28,7 @@ const Profile = () => {
 
     const fetchProfile = async () => {
         const token = localStorage.getItem('token');
-        
+
         if (!token) {
             navigate('/login');
             return;
@@ -259,11 +259,11 @@ const Profile = () => {
                             </div>
                             <div className="stat-item">
                                 <span className="stat-number">
-                                    {profileData?.user.createdAt ? 
-                                        new Date(profileData.user.createdAt).toLocaleDateString('en-US', { 
-                                            month: 'short', 
-                                            year: 'numeric' 
-                                        }) 
+                                    {profileData?.user.createdAt ?
+                                        new Date(profileData.user.createdAt).toLocaleDateString('en-US', {
+                                            month: 'short',
+                                            year: 'numeric'
+                                        })
                                         : 'N/A'}
                                 </span>
                                 <span className="stat-label">Member Since</span>
@@ -271,8 +271,8 @@ const Profile = () => {
                         </div>
                     </div>
                     <div className="profile-actions">
-                        <button 
-                            onClick={() => setShowPasswordModal(true)} 
+                        <button
+                            onClick={() => setShowPasswordModal(true)}
                             className="password-button"
                         >
                             {passwordStatus.hasPassword ? '🔒 Change Password' : '🔐 Set Password'}
@@ -290,8 +290,8 @@ const Profile = () => {
                     <div className="modal-content" onClick={(e) => e.stopPropagation()}>
                         <div className="modal-header">
                             <h2>{passwordStatus.hasPassword ? 'Change Password' : 'Set Password'}</h2>
-                            <button 
-                                className="modal-close" 
+                            <button
+                                className="modal-close"
                                 onClick={() => {
                                     setShowPasswordModal(false);
                                     setPasswordError('');
@@ -341,8 +341,8 @@ const Profile = () => {
                             </div>
                             {passwordError && <div className="error-message">{passwordError}</div>}
                             {passwordSuccess && <div className="success-message">{passwordSuccess}</div>}
-                            <button 
-                                type="submit" 
+                            <button
+                                type="submit"
                                 className="submit-button"
                                 disabled={passwordLoading}
                             >
