@@ -61,7 +61,38 @@ app.get('/api/recipes', async (req, res) => {
   }
 });
 
-// GET single recipe
+// Search recipes across entire database (MUST be before /:id route)
+app.get('/api/recipes/search', async (req, res) => {
+  try {
+    const { q } = req.query;
+    
+    if (!q || q.trim() === '') {
+      return res.json({ recipes: [] });
+    }
+
+    const searchQuery = {
+      $or: [
+        { title: { $regex: q, $options: 'i' } },
+        { description: { $regex: q, $options: 'i' } },
+        { ingredients: { $regex: q, $options: 'i' } },
+        { cuisine: { $regex: q, $options: 'i' } }
+      ]
+    };
+
+    const recipes = await Recipe.find(searchQuery)
+      .sort({ createdAt: -1 })
+      .limit(50); // Limit to 50 results
+
+    res.json({
+      recipes,
+      count: recipes.length
+    });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+// GET single recipe (MUST be after /search route)
 app.get('/api/recipes/:id', async (req, res) => {
   try {
     const recipe = await Recipe.findById(req.params.id);

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import RecipeCard from '../components/RecipeCard';
+import SearchModal from '../components/SearchModal';
 import './Recipes.css';
 
 const Recipes = () => {
@@ -12,6 +13,7 @@ const Recipes = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [hasMore, setHasMore] = useState(true);
     const [totalRecipes, setTotalRecipes] = useState(0);
+    const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
 
     const fetchRecipes = async (page = 1, append = false) => {
         try {
@@ -67,17 +69,22 @@ const Recipes = () => {
 
     return (
         <div className="recipes-page">
+            <SearchModal 
+                isOpen={isSearchModalOpen} 
+                onClose={() => setIsSearchModalOpen(false)} 
+            />
+            
             <header className="recipes-hero">
                 <div className="container">
                     <p className="hero-sub">EXPLORE OUR COLLECTION</p>
                     <h1 className="hero-title">All Recipes</h1>
 
-                    <div className="hero-search">
+                    <div className="hero-search" onClick={() => setIsSearchModalOpen(true)}>
                         <input
                             type="text"
-                            placeholder="Search recipes by name or ingredient..."
-                            value={searchTerm}
-                            onChange={(e) => setSearchTerm(e.target.value)}
+                            placeholder="Click to search recipes..."
+                            value=""
+                            readOnly
                         />
                         <button className="search-btn">
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
