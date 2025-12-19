@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 
 const recipeSchema = new mongoose.Schema({
+  // Original fields
   title: { type: String, required: true },
   image: { type: String, required: true },
   description: { type: String, required: true },
@@ -22,6 +23,33 @@ const recipeSchema = new mongoose.Schema({
     type: String,
     default: 'Anonymous'
   },
+  
+  // TheMealDB API fields
+  idMeal: { type: String }, // TheMealDB unique ID
+  strMeal: { type: String }, // TheMealDB meal name
+  strCategory: { type: String }, // e.g., "Seafood", "Pasta"
+  strArea: { type: String }, // e.g., "Italian", "British"
+  strInstructions: { type: String }, // Full cooking instructions
+  strMealThumb: { type: String }, // TheMealDB image URL
+  strTags: { type: String }, // Comma-separated tags
+  strYoutube: { type: String }, // YouTube video link
+  
+  // Ingredients with measures (up to 20)
+  ingredients_with_measures: [{
+    ingredient: String,
+    measure: String
+  }],
+  
+  strSource: { type: String }, // Source URL
+  strImageSource: { type: String },
+  
+  // Source tracking
+  source: { 
+    type: String, 
+    enum: ['user', 'themealdb', 'manual'], 
+    default: 'user' 
+  },
+  
   createdAt: { type: Date, default: Date.now }
 });
 

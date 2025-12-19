@@ -15,6 +15,7 @@ const recipeSchema = new mongoose.Schema({
     difficulty: { type: String, default: 'Medium' },
     cuisine: { type: String, default: 'Global' },
     dietaryType: { type: String, enum: ['Veg', 'Non-Veg', 'Vegan'], default: 'Veg' },
+    source: { type: String, enum: ['user', 'themealdb', 'manual'], default: 'manual' },
     createdAt: { type: Date, default: Date.now }
 });
 
@@ -45,7 +46,8 @@ const sampleRecipes = [
         servings: "4 bowls",
         difficulty: "Easy",
         cuisine: "Italian",
-        dietaryType: "Veg"
+        dietaryType: "Veg",
+        source: "manual"
     },
     {
         title: "Classic Spaghetti Carbonara",
@@ -67,7 +69,8 @@ const sampleRecipes = [
         servings: "4 people",
         difficulty: "Medium",
         cuisine: "Italian",
-        dietaryType: "Non-Veg"
+        dietaryType: "Non-Veg",
+        source: "manual"
     },
 
     // --- INDIAN ---
@@ -91,7 +94,8 @@ const sampleRecipes = [
         servings: "4 people",
         difficulty: "Medium",
         cuisine: "Indian",
-        dietaryType: "Non-Veg"
+        dietaryType: "Non-Veg",
+        source: "manual"
     },
     {
         title: "Palak Paneer",
@@ -113,7 +117,8 @@ const sampleRecipes = [
         servings: "3 people",
         difficulty: "Easy",
         cuisine: "Indian",
-        dietaryType: "Veg"
+        dietaryType: "Veg",
+        source: "manual"
     },
     {
         title: "Vegetable Biryani",
@@ -127,7 +132,8 @@ const sampleRecipes = [
         servings: "4 people",
         difficulty: "Hard",
         cuisine: "Indian",
-        dietaryType: "Veg"
+        dietaryType: "Veg",
+        source: "manual"
     },
 
     // --- MEXICAN ---
@@ -150,7 +156,8 @@ const sampleRecipes = [
         servings: "6 people",
         difficulty: "Medium",
         cuisine: "Mexican",
-        dietaryType: "Non-Veg"
+        dietaryType: "Non-Veg",
+        source: "manual"
     },
     {
         title: "Guacamole & Homemade Chips",
@@ -164,7 +171,8 @@ const sampleRecipes = [
         servings: "4 people",
         difficulty: "Easy",
         cuisine: "Mexican",
-        dietaryType: "Veg"
+        dietaryType: "Veg",
+        source: "manual"
     },
 
     // --- ASIAN ---
@@ -188,7 +196,8 @@ const sampleRecipes = [
         servings: "3 people",
         difficulty: "Medium",
         cuisine: "Asian",
-        dietaryType: "Non-Veg"
+        dietaryType: "Non-Veg",
+        source: "manual"
     },
     {
         title: "Japanese Ramen",
@@ -202,7 +211,8 @@ const sampleRecipes = [
         servings: "2 people",
         difficulty: "Medium",
         cuisine: "Asian",
-        dietaryType: "Non-Veg"
+        dietaryType: "Non-Veg",
+        source: "manual"
     },
     {
         title: "Veggie Stir-Fry",
@@ -216,7 +226,8 @@ const sampleRecipes = [
         servings: "2 people",
         difficulty: "Easy",
         cuisine: "Asian",
-        dietaryType: "Veg"
+        dietaryType: "Veg",
+        source: "manual"
     },
 
     // --- BAKING / DESSERTS ---
@@ -232,7 +243,8 @@ const sampleRecipes = [
         servings: "1 loaf",
         difficulty: "Hard",
         cuisine: "Global",
-        dietaryType: "Veg"
+        dietaryType: "Veg",
+        source: "manual"
     },
     {
         title: "Berry & Fig Glazed Tart",
@@ -246,7 +258,8 @@ const sampleRecipes = [
         servings: "8 slices",
         difficulty: "Medium",
         cuisine: "French",
-        dietaryType: "Veg"
+        dietaryType: "Veg",
+        source: "manual"
     },
     {
         title: "Classic Chocolate Chip Cookies",
@@ -260,7 +273,8 @@ const sampleRecipes = [
         servings: "24 cookies",
         difficulty: "Easy",
         cuisine: "American",
-        dietaryType: "Veg"
+        dietaryType: "Veg",
+        source: "manual"
     },
     {
         title: "Lemon Herb Roasted Chicken",
@@ -274,7 +288,8 @@ const sampleRecipes = [
         servings: "5 people",
         difficulty: "Medium",
         cuisine: "Global",
-        dietaryType: "Non-Veg"
+        dietaryType: "Non-Veg",
+        source: "manual"
     },
     {
         title: "Greek Salad",
@@ -288,7 +303,8 @@ const sampleRecipes = [
         servings: "2 people",
         difficulty: "Easy",
         cuisine: "Mediterranean",
-        dietaryType: "Veg"
+        dietaryType: "Veg",
+        source: "manual"
     }
 ];
 
