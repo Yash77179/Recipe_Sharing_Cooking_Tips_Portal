@@ -35,11 +35,27 @@ app.use('/api/auth', authRoutes);
 
 // Routes
 
-// GET all recipes
+// GET all recipes with pagination
 app.get('/api/recipes', async (req, res) => {
   try {
-    const recipes = await Recipe.find().sort({ createdAt: -1 });
-    res.json(recipes);
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 12;
+    const skip = (page - 1) * limit;
+
+    const recipes = await Recipe.find()
+      .sort({ createdAt: -1 })
+      .skip(skip)
+      .limit(limit);
+
+    const total = await Recipe.countDocuments();
+
+    res.json({
+      recipes,
+      currentPage: page,
+      totalPages: Math.ceil(total / limit),
+      totalRecipes: total,
+      hasMore: skip + recipes.length < total
+    });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }

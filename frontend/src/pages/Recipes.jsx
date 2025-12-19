@@ -6,21 +6,43 @@ const Recipes = () => {
     const [recipes, setRecipes] = useState([]);
     const [filteredRecipes, setFilteredRecipes] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [loadingMore, setLoadingMore] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
     const [filterType, setFilterType] = useState('All'); // All, Veg, Non-Veg
+    const [currentPage, setCurrentPage] = useState(1);
+    const [hasMore, setHasMore] = useState(true);
+    const [totalRecipes, setTotalRecipes] = useState(0);
+
+    const fetchRecipes = async (page = 1, append = false) => {
+        try {
+            if (append) {
+                setLoadingMore(true);
+            } else {
+                setLoading(true);
+            }
+
+            const response = await fetch(`http://localhost:5001/api/recipes?page=${page}&limit=12`);
+            const data = await response.json();
+
+            if (append) {
+                setRecipes(prev => [...prev, ...data.recipes]);
+            } else {
+                setRecipes(data.recipes);
+            }
+
+            setHasMore(data.hasMore);
+            setTotalRecipes(data.totalRecipes);
+            setCurrentPage(page);
+        } catch (err) {
+            console.error("Failed to fetch recipes", err);
+        } finally {
+            setLoading(false);
+            setLoadingMore(false);
+        }
+    };
 
     useEffect(() => {
-        fetch('http://localhost:5001/api/recipes')
-            .then(res => res.json())
-            .then(data => {
-                setRecipes(data);
-                setFilteredRecipes(data);
-                setLoading(false);
-            })
-            .catch(err => {
-                console.error("Failed to fetch recipes", err);
-                setLoading(false);
-            });
+        fetchRecipes(1, false);
     }, []);
 
     // Handle search & filter
@@ -105,11 +127,25 @@ const Recipes = () => {
                 {loading ? (
                     <div className="loading">Loading...</div>
                 ) : (
-                    <div className="grid-recipes">
-                        {filteredRecipes.map(recipe => (
-                            <RecipeCard key={recipe._id} recipe={recipe} />
-                        ))}
-                    </div>
+                    <>
+                        <div className="grid-recipes">
+                            {filteredRecipes.map(recipe => (
+                                <RecipeCard key={recipe._id} recipe={recipe} />
+                            ))}
+                        </div>
+
+                        {!searchTerm && !loading && hasMore && (
+                            <div style={{ textAlign: 'center', marginTop: '2rem' }}>
+                                <button 
+                                    className="load-more-btn"
+                                    onClick={() => fetchRecipes(currentPage + 1, true)}
+                                    disabled={loadingMore}
+                                >
+                                    {loadingMore ? 'Loading...' : 'Load More Recipes'}
+                                </button>
+                            </div>
+                        )}
+                    </>
                 )}
 
                 {!loading && filteredRecipes.length === 0 && (
