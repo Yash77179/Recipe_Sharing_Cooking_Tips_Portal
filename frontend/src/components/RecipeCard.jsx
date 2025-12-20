@@ -18,26 +18,8 @@ const RecipeCard = ({ recipe }) => {
         setLiked(!liked);
     };
 
-    useGSAP(() => {
-        // Scroll entrance animation
-        gsap.fromTo(cardRef.current,
-            {
-                opacity: 0,
-                y: 50
-            },
-            {
-                opacity: 1,
-                y: 0,
-                duration: 0.8,
-                ease: 'power3.out',
-                scrollTrigger: {
-                    trigger: cardRef.current,
-                    start: 'top 90%',
-                    toggleActions: 'play none none none'
-                }
-            }
-        );
-    }, { scope: cardRef });
+    // No scroll entrance animation as requested
+
 
     const handleMouseEnter = () => {
         gsap.to(imageRef.current, {

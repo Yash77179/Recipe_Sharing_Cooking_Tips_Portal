@@ -11,52 +11,49 @@ const Recipes = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [filterType, setFilterType] = useState('All'); // All, Veg, Non-Veg
     const [currentPage, setCurrentPage] = useState(1);
-    const [hasMore, setHasMore] = useState(true);
+    const [totalPages, setTotalPages] = useState(1);
     const [totalRecipes, setTotalRecipes] = useState(0);
+    const [totalVeg, setTotalVeg] = useState(0);
+    const [totalNonVeg, setTotalNonVeg] = useState(0);
     const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
 
-    const fetchRecipes = async (page = 1, append = false) => {
-        try {
-            if (append) {
-                setLoadingMore(true);
-            } else {
-                setLoading(true);
-            }
 
-            const response = await fetch(`http://localhost:5001/api/recipes?page=${page}&limit=12`);
+
+    const fetchRecipes = async () => {
+        try {
+            setLoading(true);
+            window.scrollTo({ top: 400, behavior: 'smooth' });
+
+            const response = await fetch(`http://localhost:5001/api/recipes?page=${currentPage}&limit=12&type=${filterType}`);
             const data = await response.json();
 
-            if (append) {
-                setRecipes(prev => [...prev, ...data.recipes]);
-            } else {
-                setRecipes(data.recipes);
-            }
-
-            setHasMore(data.hasMore);
+            setRecipes(data.recipes);
+            setTotalPages(data.totalPages);
             setTotalRecipes(data.totalRecipes);
-            setCurrentPage(page);
+            setTotalVeg(data.totalVeg);
+            setTotalNonVeg(data.totalNonVeg);
         } catch (err) {
             console.error("Failed to fetch recipes", err);
         } finally {
             setLoading(false);
-            setLoadingMore(false);
         }
     };
 
-    useEffect(() => {
-        fetchRecipes(1, false);
-    }, []);
 
-    // Handle search & filter
+
+
+    useEffect(() => {
+        fetchRecipes();
+    }, [filterType, currentPage]);
+
+
+
+    // Handle search local filter
     useEffect(() => {
         let results = recipes;
 
-        // Filter by Type
-        if (filterType !== 'All') {
-            results = results.filter(r => r.dietaryType === filterType);
-        }
-
-        // Filter by Search
+        // Filter by Search (still local for performance on current page results, 
+        // but backend search exists in SearchModal)
         if (searchTerm) {
             results = results.filter(recipe =>
                 recipe.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -65,19 +62,23 @@ const Recipes = () => {
         }
 
         setFilteredRecipes(results);
-    }, [searchTerm, filterType, recipes]);
+    }, [searchTerm, recipes]);
+
 
     return (
         <div className="recipes-page">
-            <SearchModal 
-                isOpen={isSearchModalOpen} 
-                onClose={() => setIsSearchModalOpen(false)} 
+            <SearchModal
+                isOpen={isSearchModalOpen}
+                onClose={() => setIsSearchModalOpen(false)}
             />
-            
+
             <header className="recipes-hero">
                 <div className="container">
                     <p className="hero-sub">EXPLORE OUR COLLECTION</p>
-                    <h1 className="hero-title">All Recipes</h1>
+                    <h1 className="hero-title">
+                        {filterType === 'All' ? 'All Recipes' : filterType === 'Veg' ? 'Vegetarian' : 'Non-Veg'}
+                    </h1>
+
 
                     <div className="hero-search" onClick={() => setIsSearchModalOpen(true)}>
                         <input
@@ -98,22 +99,24 @@ const Recipes = () => {
                     <div className="filter-panel">
                         <button
                             className={`filter-btn ${filterType === 'All' ? 'active' : ''}`}
-                            onClick={() => setFilterType('All')}
+                            onClick={() => { setFilterType('All'); setCurrentPage(1); }}
                         >
                             All Recipes
                         </button>
                         <button
                             className={`filter-btn ${filterType === 'Veg' ? 'active' : ''}`}
-                            onClick={() => setFilterType('Veg')}
+                            onClick={() => { setFilterType('Veg'); setCurrentPage(1); }}
                         >
                             Vegetarian
                         </button>
                         <button
                             className={`filter-btn ${filterType === 'Non-Veg' ? 'active' : ''}`}
-                            onClick={() => setFilterType('Non-Veg')}
+                            onClick={() => { setFilterType('Non-Veg'); setCurrentPage(1); }}
                         >
                             Non-Veg
                         </button>
+
+
                     </div>
                 </div>
             </header>
@@ -126,7 +129,10 @@ const Recipes = () => {
                     <div className="section-divider"></div>
                     {!loading && (
                         <p className="results-count">
-                            {filteredRecipes.length} {filteredRecipes.length === 1 ? 'recipe' : 'recipes'} found
+                            {searchTerm
+                                ? `${filteredRecipes.length} ${filteredRecipes.length === 1 ? 'recipe' : 'recipes'} found`
+                                : `${filterType === 'All' ? totalRecipes : filterType === 'Veg' ? totalVeg : totalNonVeg} ${(filterType === 'All' ? totalRecipes : filterType === 'Veg' ? totalVeg : totalNonVeg) === 1 ? 'recipe exists' : 'recipes exist'
+                                } in database`}
                         </p>
                     )}
                 </div>
@@ -141,17 +147,73 @@ const Recipes = () => {
                             ))}
                         </div>
 
-                        {!searchTerm && !loading && hasMore && (
-                            <div style={{ textAlign: 'center', marginTop: '2rem' }}>
-                                <button 
-                                    className="load-more-btn"
-                                    onClick={() => fetchRecipes(currentPage + 1, true)}
-                                    disabled={loadingMore}
+                        {/* Pagination UI */}
+                        {!searchTerm && totalPages > 1 && (
+                            <div className="pagination-container">
+                                <button
+                                    className="page-nav-btn"
+                                    onClick={() => setCurrentPage(1)}
+                                    disabled={currentPage === 1}
                                 >
-                                    {loadingMore ? 'Loading...' : 'Load More Recipes'}
+                                    First
                                 </button>
+                                <button
+                                    className="page-nav-btn"
+                                    onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+                                    disabled={currentPage === 1}
+                                >
+                                    Prev
+                                </button>
+
+
+                                <div className="page-numbers">
+                                    {[...Array(totalPages)].map((_, index) => {
+                                        const pageNum = index + 1;
+                                        // Show only a few pages around current page if total pages is large
+                                        if (
+                                            totalPages <= 5 ||
+                                            pageNum === 1 ||
+                                            pageNum === totalPages ||
+                                            (pageNum >= currentPage - 1 && pageNum <= currentPage + 1)
+                                        ) {
+                                            return (
+                                                <button
+                                                    key={pageNum}
+                                                    className={`page-num-btn ${currentPage === pageNum ? 'active' : ''}`}
+                                                    onClick={() => setCurrentPage(pageNum)}
+                                                >
+                                                    {pageNum}
+                                                </button>
+
+                                            );
+                                        } else if (
+                                            (pageNum === currentPage - 2 && pageNum > 1) ||
+                                            (pageNum === currentPage + 2 && pageNum < totalPages)
+                                        ) {
+                                            return <span key={pageNum} className="page-dots">...</span>;
+                                        }
+                                        return null;
+                                    })}
+                                </div>
+
+                                <button
+                                    className="page-nav-btn"
+                                    onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
+                                    disabled={currentPage === totalPages}
+                                >
+                                    Next
+                                </button>
+                                <button
+                                    className="page-nav-btn"
+                                    onClick={() => setCurrentPage(totalPages)}
+                                    disabled={currentPage === totalPages}
+                                >
+                                    Last
+                                </button>
+
                             </div>
                         )}
+
                     </>
                 )}
 

@@ -41,20 +41,35 @@ app.get('/api/recipes', async (req, res) => {
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 12;
     const skip = (page - 1) * limit;
+    const type = req.query.type; // Veg, Non-Veg, or All
 
-    const recipes = await Recipe.find()
+    let query = {};
+    if (type && type !== 'All') {
+      query.dietaryType = type;
+    }
+
+
+
+
+    const recipes = await Recipe.find(query)
       .sort({ createdAt: -1 })
       .skip(skip)
       .limit(limit);
 
-    const total = await Recipe.countDocuments();
+    const totalFiltered = await Recipe.countDocuments(query);
+    const totalAll = await Recipe.countDocuments();
+    const totalVeg = await Recipe.countDocuments({ dietaryType: 'Veg' });
+    const totalNonVeg = await Recipe.countDocuments({ dietaryType: 'Non-Veg' });
 
     res.json({
       recipes,
       currentPage: page,
-      totalPages: Math.ceil(total / limit),
-      totalRecipes: total,
-      hasMore: skip + recipes.length < total
+      totalPages: Math.ceil(totalFiltered / limit),
+      totalRecipes: totalAll,
+      totalFiltered,
+      totalVeg,
+      totalNonVeg,
+      hasMore: skip + recipes.length < totalFiltered
     });
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -65,7 +80,7 @@ app.get('/api/recipes', async (req, res) => {
 app.get('/api/recipes/search', async (req, res) => {
   try {
     const { q } = req.query;
-    
+
     if (!q || q.trim() === '') {
       return res.json({ recipes: [] });
     }
