@@ -14,17 +14,24 @@ const RecipeDetails = () => {
 
     useEffect(() => {
         fetch(`http://localhost:5001/api/recipes/${id}`)
-            .then(res => res.json())
+            .then(res => {
+                if (!res.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return res.json();
+            })
             .then(data => {
                 setRecipe(data);
-                // Parse servings string (e.g. "4 bowls" -> 4)
-                const parsedServings = parseInt(data.servings) || 4;
-                setBaseServings(parsedServings);
-                setCurrentServings(parsedServings);
+                if (data && data.servings) {
+                    const parsedServings = parseInt(data.servings) || 4;
+                    setBaseServings(parsedServings);
+                    setCurrentServings(parsedServings);
+                }
                 setLoading(false);
             })
             .catch(err => {
                 console.error(err);
+                setRecipe(null); // Ensure null on error so "Recipe not found" renders
                 setLoading(false);
             });
     }, [id]);

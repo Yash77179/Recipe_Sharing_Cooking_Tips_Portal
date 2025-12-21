@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { EffectCoverflow, Pagination, Autoplay } from 'swiper/modules';
 
@@ -13,6 +13,7 @@ import './Home.css';
 const Home = () => {
     const [randomRecipes, setRandomRecipes] = useState([]);
     const [loading, setLoading] = useState(true);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchRandomRecipes = async () => {
@@ -29,6 +30,10 @@ const Home = () => {
 
         fetchRandomRecipes();
     }, []);
+
+    const handleCardClick = (recipeId) => {
+        navigate(`/recipes/${recipeId}`);
+    };
 
     return (
         <div className="home-container">
@@ -78,6 +83,7 @@ const Home = () => {
                             centeredSlides={true}
                             loop={true}
                             slidesPerView={'auto'}
+                            slideToClickedSlide={true}
                             breakpoints={{
                                 768: {
                                     slidesPerView: 3,
@@ -91,6 +97,8 @@ const Home = () => {
                                 slideShadows: true,
                             }}
                             pagination={true}
+                            preventClicks={false}
+                            preventClicksPropagation={false}
                             autoplay={{
                                 delay: 2500,
                                 disableOnInteraction: false,
@@ -100,7 +108,12 @@ const Home = () => {
                         >
                             {randomRecipes.map((recipe, index) => (
                                 <SwiperSlide key={`${recipe._id}-${index}`} className="swiper-slide-custom">
-                                    <Link to={`/recipes/${recipe._id}`} className="marquee-card-premium">
+                                    <div
+                                        onClick={() => handleCardClick(recipe._id)}
+                                        className="marquee-card-premium cursor-pointer"
+                                        role="button"
+                                        tabIndex={0}
+                                    >
                                         <div className="premium-img-wrapper">
                                             <img src={recipe.image} alt={recipe.title} />
                                             <div className="premium-overlay">
@@ -119,7 +132,7 @@ const Home = () => {
                                                 <span className="cook-now-text">Cook Now <span className="arrow">→</span></span>
                                             </div>
                                         </div>
-                                    </Link>
+                                    </div>
                                 </SwiperSlide>
                             ))}
                         </Swiper>

@@ -508,6 +508,11 @@ h3 {
     }
 }
 
+.swiper-slide-custom.swiper-slide-active {
+    z-index: 10 !important;
+    pointer-events: auto !important;
+}
+
 .marquee-card-premium {
     display: block;
     width: 100%;
@@ -519,7 +524,10 @@ h3 {
     background: #000;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
     transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
-    /* Note: Swiper handles the 3D transform, we just handle inner content hover */
+    cursor: pointer;
+    /* Ensure hand pointer */
+    pointer-events: auto !important;
+    /* Force clickable */
 }
 
 /* Inner content styles remain similar to previous premium design */
@@ -582,6 +590,10 @@ h3 {
     opacity: 0;
     transform: translateY(10px);
     transition: all 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.cursor-pointer {
+    cursor: pointer;
 }
 
 .swiper-slide-active:hover .premium-card-header {
