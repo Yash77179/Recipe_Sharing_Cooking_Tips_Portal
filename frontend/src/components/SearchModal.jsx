@@ -64,7 +64,7 @@ const SearchModal = ({ isOpen, onClose }) => {
     };
 
     const handleRecipeClick = (recipeId) => {
-        navigate(`/recipe/${recipeId}`);
+        navigate(`/recipes/${recipeId}`);
         onClose();
     };
 
