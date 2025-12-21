@@ -38,11 +38,17 @@ passport.use(new GoogleStrategy({
   async (accessToken, refreshToken, profile, done) => {
     try {
       const googleEmail = normalizeEmail(profile.emails[0].value);
+      console.log('Google Profile:', JSON.stringify(profile, null, 2)); // Debug log
 
       // Check if user exists with this Google ID
       let user = await User.findOne({ googleId: profile.id });
 
       if (user) {
+        // Update photo if available
+        if (profile.photos && profile.photos.length > 0) {
+          user.photo = profile.photos[0].value;
+          await user.save();
+        }
         return done(null, user);
       }
 
@@ -52,6 +58,9 @@ passport.use(new GoogleStrategy({
       if (user) {
         // Link Google account to existing user
         user.googleId = profile.id;
+        if (profile.photos && profile.photos.length > 0) {
+          user.photo = profile.photos[0].value;
+        }
         await user.save();
         return done(null, user);
       }
@@ -60,7 +69,8 @@ passport.use(new GoogleStrategy({
       user = await User.create({
         name: profile.displayName,
         email: googleEmail,
-        googleId: profile.id
+        googleId: profile.id,
+        photo: profile.photos && profile.photos.length > 0 ? profile.photos[0].value : ''
       });
 
       done(null, user);
@@ -206,7 +216,8 @@ router.post('/login', [
         id: user._id,
         name: user.name,
         email: user.email,
-        favorites: user.favorites || []
+        favorites: user.favorites || [],
+        photo: user.photo
       }
     });
   } catch (error) {
@@ -232,7 +243,8 @@ router.get('/profile', auth, async (req, res) => {
         name: user.name,
         email: user.email,
         createdAt: user.createdAt,
-        favorites: user.favorites || []
+        favorites: user.favorites || [],
+        photo: user.photo
       },
       recipes,
       recipeCount: recipes.length
@@ -299,7 +311,8 @@ router.get('/verify', auth, async (req, res) => {
         id: user._id,
         name: user.name,
         email: user.email,
-        favorites: user.favorites || []
+        favorites: user.favorites || [],
+        photo: user.photo
       }
     });
   } catch (error) {
@@ -472,7 +485,8 @@ router.get('/google/callback',
     res.redirect(`http://localhost:5173/auth/callback?token=${token}&user=${encodeURIComponent(JSON.stringify({
       id: req.user._id,
       name: req.user.name,
-      email: req.user.email
+      email: req.user.email,
+      photo: req.user.photo
     }))}`);
   }
 );

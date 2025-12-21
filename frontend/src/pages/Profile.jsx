@@ -6,6 +6,11 @@ import SuggestionsWidget from '../components/SuggestionsWidget';
 import { motion, AnimatePresence } from 'framer-motion';
 import './Profile.css';
 
+/**
+ * Profile Page Component
+ * Redesigned to feature a full-width gradient banner, single-column layout,
+ * and floating recommendations widget. Displays user stats, favorites, and shared recipes.
+ */
 const Profile = () => {
     const [profileData, setProfileData] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -80,6 +85,7 @@ const Profile = () => {
             }
 
             const data = await response.json();
+            console.log('Profile Data:', data); // Debug log
 
             if (!response.ok) {
                 if (response.status === 401) {
@@ -276,21 +282,37 @@ const Profile = () => {
 
     return (
         <div className="profile-container">
-            <div className="profile-header">
-                <div className="profile-info-card">
+            {/* Banner Header */}
+            <div className="profile-info-card">
+                <div className="profile-header-content">
                     <div className="profile-avatar">
-                        {profileData?.user.name.charAt(0).toUpperCase()}
+                        {profileData?.user.photo ? (
+                            <img
+                                src={profileData.user.photo}
+                                alt={profileData.user.name}
+                                style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '50%' }}
+                            />
+                        ) : (
+                            profileData?.user.name.charAt(0).toUpperCase()
+                        )}
                     </div>
                     <div className="profile-details">
-                        <h1 className="profile-name">{profileData?.user.name}</h1>
+                        <div className="profile-name-row">
+                            <h1 className="profile-name">{profileData?.user.name}</h1>
+                            <span className="pro-badge">MEMBER</span>
+                        </div>
                         <p className="profile-email">{profileData?.user.email}</p>
                         <div className="profile-stats">
                             <div className="stat-item">
-                                <span className="stat-number">{profileData?.recipeCount || 0}</span>
+                                <span className="stat-number">
+                                    {profileData?.recipeCount || 0} <span className="stat-icon">🍳</span>
+                                </span>
                                 <span className="stat-label">Recipes Shared</span>
                             </div>
                             <div className="stat-item">
-                                <span className="stat-number">{profileData?.user.favorites?.length || 0}</span>
+                                <span className="stat-number">
+                                    {profileData?.user.favorites?.length || 0} <span className="stat-icon">♡</span>
+                                </span>
                                 <span className="stat-label">Favorites</span>
                             </div>
                             <div className="stat-item">
@@ -306,24 +328,22 @@ const Profile = () => {
                             </div>
                         </div>
                     </div>
-                    <div className="profile-actions">
-                        <button
-                            onClick={() => setShowPasswordModal(true)}
-                            className="password-button"
-                        >
-                            {passwordStatus.hasPassword ? '🔒 Change Password' : '🔐 Set Password'}
-                        </button>
-                        <button onClick={handleLogout} className="logout-button">
-                            Logout
-                        </button>
-                    </div>
+                </div>
+
+                <div className="profile-actions">
+                    <button
+                        onClick={() => setShowPasswordModal(true)}
+                        className="password-button"
+                    >
+                        {passwordStatus.hasPassword ? '🔒 Change Password' : '🔐 Set Password'}
+                    </button>
+                    <button onClick={handleLogout} className="logout-button">
+                        Logout
+                    </button>
                 </div>
             </div>
 
-            {/* Password Modal - Keeping unchanged but included in replace block if needed or skipping if I can target specific range */}
-
-            {/* ... Password Modal Code ... (Actually I should try to target just the profile-content div if possible to avoid re-writing modal code, but the task described replacing layout) */}
-
+            {/* Password Modal (kept same logic, just insuring it renders) */}
             {showPasswordModal && (
                 <div className="modal-overlay" onClick={() => setShowPasswordModal(false)}>
                     <div className="modal-content" onClick={(e) => e.stopPropagation()}>
@@ -392,81 +412,57 @@ const Profile = () => {
                 </div>
             )}
 
+            {/* Main Content Area */}
             <div className="profile-content">
-                <div className="profile-main">
-                    <div className="tabs-header">
-                        <button
-                            className={`tab-btn ${activeTab === 'recipes' ? 'active' : ''}`}
-                            onClick={() => setActiveTab('recipes')}
-                        >
-                            My Recipes
-                        </button>
-                        <button
-                            className={`tab-btn ${activeTab === 'favorites' ? 'active' : ''}`}
-                            onClick={() => setActiveTab('favorites')}
-                        >
-                            My Favorites
-                        </button>
+                <div className="tabs-header">
+                    <button
+                        className={`tab-btn ${activeTab === 'recipes' ? 'active' : ''}`}
+                        onClick={() => setActiveTab('recipes')}
+                    >
+                        My Recipes
+                    </button>
+                    <button
+                        className={`tab-btn ${activeTab === 'favorites' ? 'active' : ''}`}
+                        onClick={() => setActiveTab('favorites')}
+                    >
+                        My Favorites
+                    </button>
+                </div>
+
+                {activeTab === 'recipes' ? (
+                    <div className="recipes-grid">
+                        <Link to="/add" className="add-new-card">
+                            <span style={{ fontSize: '3rem', marginBottom: '1rem' }}>+</span>
+                            <span>Add New Recipe</span>
+                        </Link>
+                        {profileData?.recipes && profileData.recipes.map((recipe) => (
+                            <RecipeCard
+                                key={recipe._id}
+                                recipe={recipe}
+                                onToggle={handleFavoriteToggle}
+                            />
+                        ))}
                     </div>
-
-                    {activeTab === 'recipes' ? (
-                        <>
-                            {/* Header for Add Recipe */}
-                            <div className="section-header" style={{ marginBottom: '1rem' }}>
-                                <span style={{ color: '#666' }}>Recipes you have shared with the community.</span>
-                                <Link to="/add" className="add-recipe-link">
-                                    + Add New Recipe
-                                </Link>
-                            </div>
-
-                            {profileData?.recipes && profileData.recipes.length > 0 ? (
-                                <div className="recipes-grid">
-                                    {profileData.recipes.map((recipe) => (
-                                        <RecipeCard
-                                            key={recipe._id}
-                                            recipe={recipe}
-                                            onToggle={handleFavoriteToggle}
-                                        />
-                                    ))}
-                                </div>
-                            ) : (
-                                <div className="no-recipes">
-                                    <p>You haven't shared any recipes yet!</p>
-                                    <Link to="/add" className="start-sharing-button">
-                                        Share Your First Recipe
-                                    </Link>
-                                </div>
-                            )}
-                        </>
-                    ) : (
-                        <>
-                            {/* Favorites Tab */}
-                            <div className="section-header" style={{ marginBottom: '1rem' }}>
-                                <span style={{ color: '#666' }}>Recipes you have collected.</span>
-                            </div>
-
+                ) : (
+                    <motion.div className="recipes-grid" layout>
+                        <AnimatePresence mode="popLayout">
                             {profileData?.user?.favorites && profileData.user.favorites.length > 0 ? (
-                                <motion.div className="recipes-grid" layout>
-                                    <AnimatePresence mode="popLayout">
-                                        {profileData.user.favorites.map((recipe) => (
-                                            // Handle if recipe is populated or just ID (though backend populates it)
-                                            typeof recipe === 'object' ? (
-                                                <motion.div
-                                                    key={recipe._id}
-                                                    layout
-                                                    initial={{ opacity: 0, scale: 0.8 }}
-                                                    animate={{ opacity: 1, scale: 1 }}
-                                                    exit={{ opacity: 0, scale: 0.8, transition: { duration: 0.3 } }}
-                                                >
-                                                    <RecipeCard
-                                                        recipe={recipe}
-                                                        onToggle={handleFavoriteToggle}
-                                                    />
-                                                </motion.div>
-                                            ) : null
-                                        ))}
-                                    </AnimatePresence>
-                                </motion.div>
+                                profileData.user.favorites.map((recipe) => (
+                                    typeof recipe === 'object' ? (
+                                        <motion.div
+                                            key={recipe._id}
+                                            layout
+                                            initial={{ opacity: 0, scale: 0.8 }}
+                                            animate={{ opacity: 1, scale: 1 }}
+                                            exit={{ opacity: 0, scale: 0.8, transition: { duration: 0.3 } }}
+                                        >
+                                            <RecipeCard
+                                                recipe={recipe}
+                                                onToggle={handleFavoriteToggle}
+                                            />
+                                        </motion.div>
+                                    ) : null
+                                ))
                             ) : (
                                 <div className="no-recipes">
                                     <p>You haven't added any favorites yet!</p>
@@ -475,14 +471,26 @@ const Profile = () => {
                                     </Link>
                                 </div>
                             )}
-                        </>
-                    )}
-                </div>
-
-                <div className="profile-sidebar">
-                    <SuggestionsWidget />
-                </div>
+                        </AnimatePresence>
+                    </motion.div>
+                )}
             </div>
+
+            {/* Draggable Floating Recommendations */}
+            <motion.div
+                className="floating-recommendations"
+                drag
+                dragMomentum={false}
+                initial={{ opacity: 0, y: 50 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.2 }}
+            >
+                <div className="floating-header">
+                    <span>Recommended For You</span>
+                    <span className="drag-handle">✥</span>
+                </div>
+                <SuggestionsWidget />
+            </motion.div>
         </div>
     );
 };
