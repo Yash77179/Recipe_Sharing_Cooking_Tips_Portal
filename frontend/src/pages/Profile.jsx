@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import RecipeCard from '../components/RecipeCard';
-import SuggestionsWidget from '../components/SuggestionsWidget';        
+import SuggestionsWidget from '../components/SuggestionsWidget';
+import { motion, AnimatePresence } from 'framer-motion';
 import './Profile.css';
 
 const Profile = () => {
@@ -20,6 +21,35 @@ const Profile = () => {
     const [passwordSuccess, setPasswordSuccess] = useState('');
     const [passwordLoading, setPasswordLoading] = useState(false);
     const [activeTab, setActiveTab] = useState('recipes');
+
+    const handleFavoriteToggle = (recipe, isLiked) => {
+        setProfileData(prevData => {
+            const currentFavorites = prevData.user.favorites || [];
+            let newFavorites;
+
+            if (isLiked) {
+                // Add to favorites (check for duplicates just in case)
+                if (!currentFavorites.some(f => (f._id || f) === recipe._id)) {
+                    newFavorites = [recipe, ...currentFavorites];
+                } else {
+                    newFavorites = currentFavorites;
+                }
+            } else {
+                // Remove from favorites
+                newFavorites = currentFavorites.filter(fav =>
+                    (typeof fav === 'string' ? fav : fav._id) !== recipe._id
+                );
+            }
+
+            return {
+                ...prevData,
+                user: {
+                    ...prevData.user,
+                    favorites: newFavorites
+                }
+            };
+        });
+    };
     const navigate = useNavigate();
     const { logout } = useAuth();
 
@@ -392,7 +422,11 @@ const Profile = () => {
                             {profileData?.recipes && profileData.recipes.length > 0 ? (
                                 <div className="recipes-grid">
                                     {profileData.recipes.map((recipe) => (
-                                        <RecipeCard key={recipe._id} recipe={recipe} />
+                                        <RecipeCard
+                                            key={recipe._id}
+                                            recipe={recipe}
+                                            onToggle={handleFavoriteToggle}
+                                        />
                                     ))}
                                 </div>
                             ) : (
@@ -412,13 +446,27 @@ const Profile = () => {
                             </div>
 
                             {profileData?.user?.favorites && profileData.user.favorites.length > 0 ? (
-                                <div className="recipes-grid">
-                                    {profileData.user.favorites.map((recipe) => (
-                                        // Handle if recipe is populated or just ID (though backend populates it)
-                                        typeof recipe === 'object' ?
-                                            <RecipeCard key={recipe._id} recipe={recipe} /> : null
-                                    ))}
-                                </div>
+                                <motion.div className="recipes-grid" layout>
+                                    <AnimatePresence mode="popLayout">
+                                        {profileData.user.favorites.map((recipe) => (
+                                            // Handle if recipe is populated or just ID (though backend populates it)
+                                            typeof recipe === 'object' ? (
+                                                <motion.div
+                                                    key={recipe._id}
+                                                    layout
+                                                    initial={{ opacity: 0, scale: 0.8 }}
+                                                    animate={{ opacity: 1, scale: 1 }}
+                                                    exit={{ opacity: 0, scale: 0.8, transition: { duration: 0.3 } }}
+                                                >
+                                                    <RecipeCard
+                                                        recipe={recipe}
+                                                        onToggle={handleFavoriteToggle}
+                                                    />
+                                                </motion.div>
+                                            ) : null
+                                        ))}
+                                    </AnimatePresence>
+                                </motion.div>
                             ) : (
                                 <div className="no-recipes">
                                     <p>You haven't added any favorites yet!</p>

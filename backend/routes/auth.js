@@ -205,7 +205,8 @@ router.post('/login', [
       user: {
         id: user._id,
         name: user.name,
-        email: user.email
+        email: user.email,
+        favorites: user.favorites || []
       }
     });
   } catch (error) {
@@ -297,7 +298,8 @@ router.get('/verify', auth, async (req, res) => {
       user: {
         id: user._id,
         name: user.name,
-        email: user.email
+        email: user.email,
+        favorites: user.favorites || []
       }
     });
   } catch (error) {
