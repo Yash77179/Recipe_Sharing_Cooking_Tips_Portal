@@ -1,0 +1,479 @@
+/* FloatingNavbar.css */
+.floating-nav-container {
+    padding: 2rem 5%;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 2100;
+    /* Increased to sit above MobileMenu (2000) */
+    pointer-events: none;
+}
+
+/* --- Logo Styling --- */
+.nav-logo {
+    position: absolute;
+    left: 5%;
+    top: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    text-decoration: none;
+    pointer-events: auto;
+
+    background: #ffffff;
+    /* Fully Opaque */
+    backdrop-filter: blur(0);
+    padding: 0.5rem 1rem;
+    border-radius: 50px;
+    border: 2px dotted #1a1a1a;
+    /* Dotted Border */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.nav-logo:hover {
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+    background: #ffffff;
+    /* Keep solid */
+}
+
+.logo-text {
+    font-family: var(--font-heading, 'Playfair Display', serif);
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--color-dark, #1a1a1a);
+    letter-spacing: -0.03em;
+    line-height: 1;
+}
+
+.logo-accent {
+    font-family: var(--font-script, 'Caveat', cursive);
+    font-size: 1.8rem;
+    color: var(--color-accent, #d4a373);
+    font-weight: 700;
+    transform: rotate(-5deg) translateY(2px);
+    display: inline-block;
+    transition: transform 0.4s ease;
+}
+
+.nav-logo:hover .logo-accent {
+    transform: rotate(5deg) scale(1.1) translateY(0);
+}
+
+/* --- Slide Tabs (Desktop) --- */
+.slide-tabs {
+    position: relative;
+    display: flex;
+    width: fit-content;
+    border-radius: 9999px;
+    border: 2px solid var(--color-dark, #1a1a1a);
+    background-color: var(--color-cream, #fdfaf3);
+    padding: 0.35rem;
+    pointer-events: auto;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.tab-item {
+    position: relative;
+    z-index: 10;
+    display: block;
+    cursor: pointer;
+    text-transform: uppercase;
+    color: #fff;
+    mix-blend-mode: difference;
+    padding: 0.6rem 1.2rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-decoration: none;
+    font-family: var(--font-body, 'Lato', sans-serif);
+    letter-spacing: 0.15em;
+    transition: opacity 0.3s;
+}
+
+@media (min-width: 768px) {
+    .tab-item {
+        padding: 0.75rem 1.5rem;
+        font-size: 0.95rem;
+    }
+}
+
+.tab-cursor {
+    position: absolute;
+    z-index: 0;
+    top: 0.35rem;
+    height: calc(100% - 0.7rem);
+    border-radius: 9999px;
+    background-color: var(--color-dark, #1a1a1a);
+}
+
+/* --- Mobile Toggle Button --- */
+.desktop-menu {
+    display: block;
+    pointer-events: auto;
+}
+
+/* --- Animated Mobile Toggle --- */
+.mobile-toggle-btn {
+    display: none;
+    /* Hidden by default (Desktop) */
+    pointer-events: auto;
+    background: rgba(255, 255, 255, 0.9);
+    /* Restored Background */
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    /* Restored Border */
+    padding: 0;
+    cursor: pointer;
+    position: fixed;
+    /* FIXED positioning to stay on top */
+    right: 5%;
+    top: 2.35rem;
+    z-index: 2100;
+    /* Above MobileMenu (2000) */
+    width: 50px;
+    /* Larger to match logo */
+    height: 50px;
+    border-radius: 50%;
+    /* Circle shape */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    /* Restored Shadow */
+    justify-content: center;
+    align-items: center;
+    transition: transform 0.2s, background-color 0.3s;
+}
+
+.mobile-toggle-btn:hover {
+    background: #fff;
+    transform: scale(1.05);
+}
+
+@media (max-width: 1024px) {
+    .mobile-toggle-btn {
+        display: flex;
+        /* Show on mobile */
+    }
+}
+
+.hamburger-box {
+    position: relative;
+    width: 24px;
+    height: 18px;
+    display: inline-block;
+}
+
+.hamburger-line {
+    display: block;
+    width: 100%;
+    height: 2px;
+    background-color: var(--color-dark, #1a1a1a);
+    border-radius: 2px;
+    position: absolute;
+    transition: transform 0.3s cubic-bezier(0.215, 0.61, 0.355, 1),
+        background-color 0.3s ease,
+        opacity 0.3s ease;
+}
+
+.hamburger-line:nth-child(1) {
+    top: 0;
+}
+
+.hamburger-line:nth-child(2) {
+    top: 8px;
+}
+
+.hamburger-line:nth-child(3) {
+    top: 16px;
+}
+
+/* Active State (X Animation) */
+.mobile-toggle-btn.active .hamburger-line:nth-child(1) {
+    transform: translateY(8px) rotate(45deg);
+}
+
+.mobile-toggle-btn.active .hamburger-line:nth-child(2) {
+    opacity: 0;
+}
+
+.mobile-toggle-btn.active .hamburger-line:nth-child(3) {
+    transform: translateY(-8px) rotate(-45deg);
+}
+
+/* Hover Effect */
+.mobile-toggle-btn:hover .hamburger-line {
+    background-color: var(--color-accent, #d4a373);
+}
+
+/* --- "Symmetrical God Mode" Mobile Menu --- */
+
+.mobile-menu-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background: var(--color-cream, #fdfaf3);
+    /* Match Website Theme */
+    z-index: 2000;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 6rem 1rem 3rem;
+    pointer-events: auto;
+    overflow: hidden;
+}
+
+/* Close Button Position */
+.mobile-close-btn {
+    position: absolute;
+    top: 2rem;
+    right: 5%;
+    background: rgba(0, 0, 0, 0.05);
+    /* Subtle dark circle */
+    border: none;
+    border-radius: 50%;
+    width: 3rem;
+    height: 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-dark, #1a1a1a);
+    /* Dark Icon */
+    cursor: pointer;
+    z-index: 2010;
+    transition: background 0.3s;
+}
+
+.mobile-close-btn:hover {
+    background: rgba(0, 0, 0, 0.1);
+}
+
+/* Ambient Effects */
+.mm-ambient-layer {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: 0;
+}
+
+/* Grain */
+.mm-grain {
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
+    opacity: 0.3;
+}
+
+/* Axis Line */
+.mm-axis-line {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 1px;
+    height: 100%;
+    background: linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.1), transparent);
+}
+
+/* Glow */
+.mm-glow {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80vw;
+    height: 80vw;
+    background: radial-gradient(circle, rgba(212, 163, 115, 0.1), transparent 70%);
+    /* Subtle accent glow */
+    filter: blur(60px);
+}
+
+/* Navigation Links */
+.mm-nav-container {
+    position: relative;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+    flex: 1;
+}
+
+.mm-link-wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.mm-link-group {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.mm-number {
+    font-family: monospace;
+    font-size: 0.8rem;
+    color: var(--color-accent, #d4a373);
+    letter-spacing: 0.2em;
+    margin-bottom: 0.25rem;
+    transition: color 0.3s;
+}
+
+.mm-link-group:hover .mm-number {
+    color: var(--color-dark, #1a1a1a);
+}
+
+.mm-label {
+    font-family: var(--font-heading, serif);
+    font-size: 3rem;
+    /* Massive Text */
+    line-height: 1.1;
+    font-weight: 400;
+    color: var(--color-dark, #1a1a1a);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    transition: all 0.5s ease;
+    opacity: 0.8;
+}
+
+.mm-link-group:hover .mm-label {
+    opacity: 1;
+    transform: scale(1.05);
+}
+
+/* Dot Reveal */
+.mm-dot {
+    width: 6px;
+    height: 6px;
+    background-color: var(--color-accent, #d4a373);
+    border-radius: 50%;
+    margin-top: 1rem;
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.mm-link-group:hover .mm-dot {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Footer Styles */
+.mm-footer {
+    position: relative;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+    padding-top: 2rem;
+}
+
+.mm-footer-actions {
+    display: flex;
+    gap: 1rem;
+}
+
+.mm-btn-outline {
+    padding: 0.8rem 2rem;
+    border: 1px solid var(--color-dark, #1a1a1a);
+    border-radius: 50px;
+    color: var(--color-dark, #1a1a1a);
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+    text-decoration: none;
+    transition: all 0.3s;
+}
+
+.mm-btn-outline:hover {
+    background: var(--color-dark, #1a1a1a);
+    color: #fff;
+}
+
+.mm-btn-solid {
+    padding: 0.8rem 2rem;
+    background: var(--color-dark, #1a1a1a);
+    border-radius: 50px;
+    color: #fff;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+    text-decoration: none;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s;
+}
+
+.mm-btn-solid:hover {
+    background: #333;
+    transform: translateY(-2px);
+}
+
+.mm-socials {
+    display: flex;
+    gap: 2rem;
+}
+
+.mm-social-link {
+    color: rgba(0, 0, 0, 0.4);
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+.mm-social-link:hover {
+    color: var(--color-dark, #1a1a1a);
+}
+
+/* Responsive Adjustments */
+@media (max-width: 1024px) {
+    .floating-nav-container {
+        justify-content: space-between;
+        align-items: center;
+        flex-direction: row;
+        padding-top: 2rem;
+    }
+
+    .desktop-menu {
+        display: none;
+    }
+
+    /* Removed conflicting mobile-toggle-btn styles to preserve fixed position */
+
+    .nav-logo {
+        position: relative;
+        left: auto;
+        top: auto;
+        margin-bottom: 0;
+    }
+}
+
+@media (max-width: 480px) {
+    .mm-label {
+        font-size: 2.2rem;
+    }
+
+    .mm-footer-actions {
+        flex-direction: column;
+        width: 100%;
+        align-items: center;
+    }
+
+    .mm-btn-outline,
+    .mm-btn-solid {
+        width: 100%;
+        text-align: center;
+    }
+}

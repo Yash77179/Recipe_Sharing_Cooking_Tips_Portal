@@ -1,8 +1,8 @@
+/* Navbar.css */
 .navbar {
-    padding: 2rem 0;
-    background-color: var(--color-bg);
-    border-bottom: 1px solid var(--color-border);
-    position: relative;
+    padding: 1.5rem 0;
+    background-color: var(--color-bg, #fdfaf3);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
 }
 
 .navbar-content {
@@ -15,108 +15,114 @@
 .navbar-top {
     width: 100%;
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
+    position: relative;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.social-placeholder {
+    flex: 1;
 }
 
 .logo {
-    font-family: var(--font-heading);
+    flex: 2;
+    font-family: var(--font-heading, serif);
     font-size: 2.5rem;
     font-weight: 500;
-    /* Regular weight for elegance */
     letter-spacing: -0.02em;
+    text-decoration: none;
+    color: var(--color-text, #1a1a1a);
     text-align: center;
-    color: #000;
+    transition: color 0.3s;
 }
 
 .nav-actions {
-    position: absolute;
-    top: 2rem;
-    right: 2rem;
+    flex: 1;
     display: flex;
+    justify-content: flex-end;
     gap: 1rem;
     align-items: center;
-}
-
-.btn-text {
-    font-size: 0.75rem;
-    letter-spacing: 0.1em;
-    font-weight: 700;
-    text-transform: uppercase;
-    background-color: #000;
-    color: #fff;
-    padding: 0.8rem 1.5rem;
-    border-radius: 30px;
-    transition: all 0.3s ease;
-}
-
-.btn-text:hover {
-    background-color: #333;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-}
-
-.btn-outline {
-    font-size: 0.75rem;
-    letter-spacing: 0.1em;
-    font-weight: 700;
-    text-transform: uppercase;
-    background-color: transparent;
-    color: #000;
-    padding: 0.8rem 1.5rem;
-    border: 2px solid #000;
-    border-radius: 30px;
-    transition: all 0.3s ease;
-}
-
-.btn-outline:hover {
-    background-color: #000;
-    color: #fff;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
 .navbar-bottom {
     display: flex;
     gap: 2.5rem;
-    align-items: center;
-}
-
-.nav-link {
-    font-family: var(--font-body);
-    font-size: 0.8rem;
-    font-weight: 400;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--color-text);
-    position: relative;
-}
-
-.nav-link::after {
-    content: '';
-    position: absolute;
-    bottom: -5px;
-    left: 0;
-    width: 0%;
-    height: 1px;
-    background-color: #000;
-    transition: width 0.3s ease;
-}
-
-.nav-link:hover::after {
+    justify-content: center;
+    flex-wrap: wrap;
     width: 100%;
 }
 
+.nav-link {
+    text-decoration: none;
+    color: var(--color-text, #1a1a1a);
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    transition: color 0.3s;
+    position: relative;
+}
+
+.nav-link:hover {
+    color: var(--color-accent, #d4a373);
+}
+
+.btn-outline {
+    padding: 0.6rem 1.4rem;
+    border: 1px solid var(--color-text, #1a1a1a);
+    border-radius: 50px;
+    text-decoration: none;
+    color: var(--color-text, #1a1a1a);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    transition: all 0.3s;
+}
+
+.btn-outline:hover {
+    background-color: var(--color-text, #1a1a1a);
+    color: #fff;
+}
+
+.btn-text {
+    text-decoration: none;
+    color: var(--color-text, #1a1a1a);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+
+/* Mobile Responsiveness */
 @media (max-width: 768px) {
     .navbar-top {
-        display: flex;
         flex-direction: column;
         gap: 1rem;
     }
 
+    .social-placeholder {
+        display: none;
+    }
+
+    .logo {
+        order: 1;
+        font-size: 2rem;
+    }
+
+    .nav-actions {
+        order: 2;
+        width: 100%;
+        justify-content: center;
+    }
+
     .navbar-bottom {
         gap: 1rem;
-        flex-wrap: wrap;
-        justify-content: center;
+    }
+
+    .nav-link {
+        font-size: 0.7rem;
     }
 }

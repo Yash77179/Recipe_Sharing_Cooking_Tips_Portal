@@ -437,7 +437,7 @@ h3 {
     .hero-organic {
         flex-direction: column-reverse;
         text-align: center;
-        padding-top: 2rem;
+        padding-top: 10rem;
     }
 
     .hero-content {
@@ -524,10 +524,7 @@ h3 {
     background: #000;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
     transition: transform 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
-    cursor: pointer;
-    /* Ensure hand pointer */
-    pointer-events: auto !important;
-    /* Force clickable */
+    /* Note: Swiper handles the 3D transform, we just handle inner content hover */
 }
 
 /* Inner content styles remain similar to previous premium design */
