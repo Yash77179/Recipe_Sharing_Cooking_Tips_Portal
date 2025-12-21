@@ -49,7 +49,7 @@ const RecipeCard = ({ recipe }) => {
 
     return (
         <Link
-            to={`/recipe/${recipe._id}`}
+            to={`/recipes/${recipe._id}`}
             className="recipe-card"
             ref={cardRef}
             onMouseEnter={handleMouseEnter}
