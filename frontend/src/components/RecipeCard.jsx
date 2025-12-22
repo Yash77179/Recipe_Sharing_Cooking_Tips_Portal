@@ -8,8 +8,8 @@ import './RecipeCard.css';
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
-const RecipeCard = ({ recipe }) => {
-    const { user, loading } = useAuth(); // Get user from context
+const RecipeCard = ({ recipe, onToggle }) => {
+    const { user, loading, updateUser } = useAuth(); // Get user from context
     const [liked, setLiked] = useState(false);
     const cardRef = useRef(null);
     const imageRef = useRef(null);
@@ -23,6 +23,8 @@ const RecipeCard = ({ recipe }) => {
                 (typeof fav === 'string' ? fav : fav._id) === recipe._id
             );
             setLiked(isFav);
+        } else {
+            setLiked(false);
         }
     }, [user, recipe]);
 
@@ -38,7 +40,10 @@ const RecipeCard = ({ recipe }) => {
 
         // Optimistic UI update
         const previousState = liked;
-        setLiked(!liked);
+        const newState = !liked;
+        // setLiked(newState); // user effect will handle this if we update context fast enough? 
+        // No, better to set local too for potential lag.
+        setLiked(newState);
 
         try {
             const token = localStorage.getItem('token');
@@ -52,7 +57,18 @@ const RecipeCard = ({ recipe }) => {
             if (!response.ok) {
                 throw new Error('Failed to update favorite');
             }
-            // Success
+
+            const data = await response.json();
+
+            // Update Context
+            if (data.favorites) {
+                updateUser({ ...user, favorites: data.favorites });
+            }
+
+            // Success - Notify parent
+            if (onToggle) {
+                onToggle(recipe, newState);
+            }
         } catch (error) {
             console.error('Error toggling favorite:', error);
             // Revert on error
