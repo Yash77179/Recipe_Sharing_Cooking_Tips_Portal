@@ -88,7 +88,8 @@ const Profile = () => {
             console.log('Profile Data:', data); // Debug log
 
             if (!response.ok) {
-                if (response.status === 401) {
+                if (response.status === 401 || response.status === 404) {
+                    // User not found or unauthorized - log them out
                     logout();
                     navigate('/login');
                     return;
@@ -99,6 +100,8 @@ const Profile = () => {
             setProfileData(data);
         } catch (error) {
             setError(error.message);
+            // If there's any error fetching profile, provide logout option
+            // This handles cases where user was deleted from database
         } finally {
             setLoading(false);
         }
@@ -275,7 +278,16 @@ const Profile = () => {
     if (error) {
         return (
             <div className="profile-container">
-                <div className="error-message">{error}</div>
+                <div className="error-message-container">
+                    <div className="error-message">{error}</div>
+                    <button 
+                        onClick={handleLogout} 
+                        className="logout-button"
+                        style={{ marginTop: '1rem' }}
+                    >
+                        Go to Login
+                    </button>
+                </div>
             </div>
         );
     }
