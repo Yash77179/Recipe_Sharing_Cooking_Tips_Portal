@@ -483,7 +483,7 @@
     overflow-x: auto;
     gap: 2rem;
     margin-top: 2rem;
-    padding-bottom: 2rem;
+    padding: 1rem 1.5rem 3rem 1.5rem;
     scroll-snap-type: x mandatory;
     scrollbar-width: thin;
     scrollbar-color: #888 #f1f1f1;
@@ -915,434 +915,91 @@
 
 }
 
-/* ========== DARK MODE STYLES FOR PROFILE PAGE ========== */
+/* ========================================
+   DARK MODE - ELEGANT & SOPHISTICATED
+   Unified dark palette with subtle yellow accents
+======================================== */
 
 .dark-mode .profile-container {
-    background-color: #1a1a1a;
+    background-color: #121212;
 }
 
-.dark-mode .profile-info-card {
-    background: rgba(26, 26, 26, 0.95);
-    border-color: #3d3d3d;
-}
-
-.dark-mode .profile-name {
-    color: #e8e8e8;
-}
-
-.dark-mode .profile-email {
-    color: #a0a0a0;
-}
-
-.dark-mode .stat-number {
-    color: #e8e8e8;
-}
-
-.dark-mode .stat-label {
-    color: #a0a0a0;
-}
-
-.dark-mode .password-button {
-    background-color: #3d3d3d;
-}
-
-.dark-mode .password-button:hover {
-    background-color: #4d4d4d;
-}
-
-.dark-mode .logout-button {
-    background-color: #e8e8e8;
-    color: #1a1a1a;
-}
-
-.dark-mode .logout-button:hover {
-    background-color: #d4d4d4;
-}
-
-/* Dark Mode - Banner and Avatar */
+/* Banner */
 .dark-mode .profile-banner {
-    border-color: #e0e0e0;
-    box-shadow: 12px 12px 0 rgba(212, 175, 55, 0.3);
+    border-color: #2a2a2a;
+    box-shadow: 12px 12px 0 rgba(0, 0, 0, 0.8);
 }
 
 .dark-mode .profile-banner:hover {
-    box-shadow: 16px 16px 0 #d4af37;
+    box-shadow: 16px 16px 0 #ffd93d;
+    border-color: #ffd93d;
 }
 
 .dark-mode .banner-overlay {
-    background: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.6) 100%);
+    background: linear-gradient(135deg, rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.6));
 }
 
 .dark-mode .banner-edit-btn {
-    background: #d4af37;
+    background: #ffd93d;
     border-color: #1a1a1a;
     color: #1a1a1a;
 }
 
 .dark-mode .banner-edit-btn:hover {
-    background: #ffd93d;
-    color: #1a1a1a;
-}
-
-.dark-mode .avatar-edit-btn {
-    background: #d4af37;
-    border-color: #1a1a1a;
-}
-
-.dark-mode .avatar-edit-btn:hover {
-    background: #ffd93d;
-}
-
-.dark-mode .stat-divider {
-    background: linear-gradient(to bottom, transparent, #e0e0e0, transparent);
-    opacity: 0.3;
-}
-
-.dark-mode .modal-content {
-    background: #2d2d2d;
-    border-color: #3d3d3d;
-}
-
-.dark-mode .modal-header {
-    border-bottom-color: #3d3d3d;
-}
-
-.dark-mode .modal-header h2 {
-    color: #e8e8e8;
-}
-
-.dark-mode .modal-close {
-    color: #a0a0a0;
-}
-
-.dark-mode .modal-close:hover {
-    color: #e8e8e8;
-}
-
-.dark-mode .form-group label {
-    color: #e8e8e8;
-}
-
-.dark-mode .form-group input {
-    background: #1a1a1a;
-    border-color: #3d3d3d;
-    color: #e8e8e8;
-}
-
-.dark-mode .form-group input:focus {
-    border-color: #d4a373;
-    box-shadow: 0 0 0 3px rgba(212, 163, 115, 0.2);
-}
-
-.dark-mode .form-group input:disabled {
-    background-color: #2d2d2d;
-}
-
-.dark-mode .form-hint {
-    color: #a0a0a0;
-}
-
-.dark-mode .password-form .error-message {
-    background-color: #3d1a1a;
-    color: #ff6b6b;
-    border-left-color: #ff6b6b;
-}
-
-.dark-mode .password-form .success-message {
-    background-color: #1a3d1a;
-    color: #4caf50;
-    border-left-color: #4caf50;
-}
-
-.dark-mode .submit-button {
-    background-color: #e8e8e8;
-    color: #1a1a1a;
-}
-
-.dark-mode .submit-button:hover:not(:disabled) {
-    background-color: #d4d4d4;
-}
-
-.dark-mode .submit-button:disabled {
-    background-color: #3d3d3d;
-    color: #666;
-}
-
-.dark-mode .tabs-header {
-    border-bottom-color: #3d3d3d;
-}
-
-.dark-mode .tab-btn {
-    color: #666;
-}
-
-.dark-mode .tab-btn.active {
-    color: #e8e8e8;
-}
-
-/* ========================================
-   COMPREHENSIVE DARK MODE - GRAY THEME
-======================================== */
-
-.dark-mode .profile-container {
-    background-color: #1a1a1a;
-}
-
-.dark-mode .profile-info-card {
-    background: #2d2d2d;
-    border-color: #555;
-    box-shadow: 12px 12px 0 rgba(85, 85, 85, 0.5);
-}
-
-.dark-mode .profile-info-card:hover {
-    box-shadow: 16px 16px 0 rgba(78, 205, 196, 0.3);
-}
-
-.dark-mode .profile-name {
-    color: #fff;
-}
-
-.dark-mode .profile-email {
-    color: #aaa;
-}
-
-.dark-mode .pro-badge {
-    background: #4ecdc4;
-    color: #1a1a1a;
-    border-color: #4ecdc4;
-}
-
-.dark-mode .stat-item {
-    background: #2d2d2d;
-}
-
-.dark-mode .stat-item:nth-child(1) {
-    border-color: #ff6b6b;
-    transform: rotate(2deg);
-}
-
-.dark-mode .stat-item:nth-child(2) {
-    border-color: #4ecdc4;
-    transform: rotate(-1deg);
-}
-
-.dark-mode .stat-item:nth-child(3) {
-    border-color: #ffd93d;
-}
-
-.dark-mode .stat-item:nth-child(1):hover {
-    box-shadow: 6px 6px 0 rgba(255, 107, 107, 0.3);
-}
-
-.dark-mode .stat-item:nth-child(2):hover {
-    box-shadow: 6px 6px 0 rgba(78, 205, 196, 0.3);
-}
-
-.dark-mode .stat-item:nth-child(3):hover {
-    box-shadow: 6px 6px 0 rgba(255, 217, 61, 0.3);
-}
-
-.dark-mode .stat-item:nth-child(1) .stat-number {
-    color: #ff6b6b;
-}
-
-.dark-mode .stat-item:nth-child(2) .stat-number {
-    color: #4ecdc4;
-}
-
-.dark-mode .stat-item:nth-child(3) .stat-number {
-    color: #ffd93d;
-}
-
-.dark-mode .stat-label {
-    color: #aaa;
-}
-
-.dark-mode .password-button {
-    background: #2d2d2d;
-    color: #fff;
-    border-color: #666;
-}
-
-.dark-mode .password-button:hover {
-    background: #3d3d3d;
-    border-color: #777;
-}
-
-.dark-mode .logout-button {
     background: #ff6b6b;
-    border-color: #ff6b6b;
-}
-
-.dark-mode .logout-button:hover {
-    background: #ff4d4d;
-}
-
-.dark-mode .tab-btn {
-    background: #2d2d2d;
-    color: #aaa;
-    border-color: #555;
-}
-
-.dark-mode .tab-btn:hover {
-    background: #3d3d3d;
-    border-color: #ffd93d;
-    color: #ffd93d;
-}
-
-.dark-mode .tab-btn.active {
-    background: #1a1a1a;
-    color: #fff;
-    border-color: #ffd93d;
-    box-shadow: 6px 6px 0 rgba(255, 217, 61, 0.3);
-}
-
-.dark-mode .add-new-card {
-    background: #2d2d2d;
-    border-color: #555;
-    border-style: dashed;
-}
-
-.dark-mode .add-new-card:hover {
-    background: #3d3d3d;
-    border-color: #4ecdc4;
-    border-style: solid;
-}
-
-.dark-mode .add-icon {
-    color: #4ecdc4;
-}
-
-.dark-mode .add-text {
-    color: #aaa;
-}
-
-.dark-mode .no-recipes-card {
-    background: #2d2d2d;
-    border-color: #555;
-}
-
-.dark-mode .no-recipes-title {
     color: #fff;
 }
 
-.dark-mode .no-recipes-text {
-    color: #aaa;
-}
-
-.dark-mode .create-recipe-btn {
-    background: #4ecdc4;
-    color: #1a1a1a;
-    border-color: #4ecdc4;
-}
-
-.dark-mode .create-recipe-btn:hover {
-    background: #44a3a3;
-}
-
-.dark-mode .floating-recommendations {
-    background: #2d2d2d;
-    border-color: #555;
-}
-
-.dark-mode .recommendations-header {
-    background: #1a1a1a;
-    border-bottom-color: #555;
-}
-
-.dark-mode .recommendations-title {
-    color: #fff;
-}
-
-.dark-mode .drag-handle {
-    color: #aaa;
-}
-
-.dark-mode .modal-overlay {
-    background: rgba(0, 0, 0, 0.8);
-}
-
-.dark-mode .modal-content {
-    background: #2d2d2d;
-    border-color: #555;
-}
-
-.dark-mode .modal-header {
-    background: #1a1a1a;
-    border-bottom-color: #555;
-}
-
-.dark-mode .modal-title {
-    color: #fff;
-}
-
-.dark-mode .close-button {
-    color: #aaa;
-}
-
-.dark-mode .close-button:hover {
-    color: #fff;
-}
-
-
-.dark-mode .tab-btn:hover {
-    color: #a0a0a0;
-}
-
-.dark-mode .tab-btn.active {
-    color: #e8e8e8;
-}
-
-.dark-mode .tab-btn.active::after {
-    background-color: #e8e8e8;
-}
-
-.dark-mode .recipes-grid::-webkit-scrollbar-track {
-    background: #2d2d2d;
-}
-
-.dark-mode .recipes-grid::-webkit-scrollbar-thumb {
-    background: #3d3d3d;
-    border-color: #2d2d2d;
-}
-
-.dark-mode .recipes-grid::-webkit-scrollbar-thumb:hover {
-    background: #4d4d4d;
-}
-
-/* ========================================
-   DARK MODE OVERRIDES - VIBRANT & NEON
-   ======================================== */
-
-.dark-mode .profile-container {
-    background-color: #121212;
-    background-image:
-        radial-gradient(circle at 10% 20%, rgba(78, 205, 196, 0.05) 0%, transparent 20%),
-        radial-gradient(circle at 90% 80%, rgba(255, 217, 61, 0.05) 0%, transparent 20%);
-}
-
+/* Profile Card */
 .dark-mode .profile-info-card {
-    background: #1e1e1e;
-    border-color: #333;
+    background: #121212;
+    border-color: #2a2a2a;
     box-shadow: 10px 10px 0 #000;
 }
 
 .dark-mode .profile-info-card:hover {
-    box-shadow: 14px 14px 0 #4ecdc4;
-    /* Cyan glow on hover */
-    border-color: #4ecdc4;
+    transform: translateY(-4px);
+    box-shadow: 14px 14px 0 #ffd93d;
+    border-color: #ffd93d;
 }
 
 .dark-mode .profile-name {
-    color: #fff;
+    color: #ffffff;
 }
 
 .dark-mode .profile-email {
-    color: #a0a0a0;
+    color: #888;
 }
 
+.dark-mode .pro-badge {
+    background: #ffd93d;
+    color: #1a1a1a;
+    border-color: #1a1a1a;
+}
+
+/* Avatar */
+.dark-mode .profile-avatar {
+    border-color: #2a2a2a;
+    box-shadow: 8px 8px 0 rgba(0, 0, 0, 0.5);
+}
+
+.dark-mode .profile-avatar:hover {
+    box-shadow: 10px 10px 0 rgba(255, 217, 61, 0.4);
+    border-color: #ffd93d;
+}
+
+.dark-mode .avatar-edit-btn {
+    background: #ffd93d;
+    border-color: #1a1a1a;
+}
+
+.dark-mode .avatar-edit-btn:hover {
+    background: #ff6b6b;
+}
+
+/* Stats */
 .dark-mode .stat-number {
-    color: #fff;
+    color: #ffffff;
 }
 
 .dark-mode .stat-label {
@@ -1350,133 +1007,208 @@
 }
 
 .dark-mode .stat-divider {
-    background: linear-gradient(to bottom, transparent, #444, transparent);
+    background: linear-gradient(to bottom, transparent, #333, transparent);
+    opacity: 0.5;
 }
 
+/* Buttons */
 .dark-mode .password-button {
-    background: #2a2a2a;
+    background: #121212;
     color: #fff;
-    border-color: #4ecdc4;
-    box-shadow: 4px 4px 0 #4ecdc4;
-}
-
-.dark-mode .password-button:hover {
-    background: #4ecdc4;
-    color: #000;
-    box-shadow: 6px 6px 0 #fff;
-}
-
-.dark-mode .logout-button {
-    background: #ff6b6b;
-    border-color: #ff6b6b;
-    color: #fff;
+    border-color: #2a2a2a;
     box-shadow: 4px 4px 0 #000;
 }
 
-.dark-mode .logout-button:hover {
-    background: #ff4757;
-    box-shadow: 6px 6px 0 #fff;
+.dark-mode .password-button:hover {
+    background: #2a2a2a;
+    border-color: #ffd93d;
+    box-shadow: 6px 6px 0 rgba(255, 217, 61, 0.2);
 }
 
+.dark-mode .logout-button {
+    background: #121212;
+    border-color: #2a2a2a;
+    color: #fff;
+    box-shadow: 4px 4px 0 #ff6b6b;
+}
+
+.dark-mode .logout-button:hover {
+    background: #ff6b6b;
+    color: #fff;
+    box-shadow: 6px 6px 0 #000;
+}
+
+/* Tabs */
 .dark-mode .tab-btn {
-    background: #1e1e1e;
-    border-color: #333;
-    color: #ccc;
+    background: #121212;
+    border-color: #2a2a2a;
+    color: #888;
     box-shadow: 3px 3px 0 #000;
 }
 
 .dark-mode .tab-btn:hover {
-    border-color: #ffd93d;
-    color: #ffd93d;
+    border-color: #333;
+    color: #fff;
+    box-shadow: 6px 6px 0 rgba(255, 217, 61, 0.1);
 }
 
 .dark-mode .tab-btn.active {
-    background: #ffd93d;
-    color: #000;
+    background: #121212;
+    color: #fff;
     border-color: #ffd93d;
-    box-shadow: 6px 6px 0 #fff;
-    /* Pop with white shadow */
+    box-shadow: 6px 6px 0 rgba(255, 217, 61, 0.3);
 }
 
+/* Add New Card */
 .dark-mode .add-new-card {
-    background: #1e1e1e;
-    border-color: #444;
-    color: #ccc;
-}
-
-.dark-mode .add-new-card:hover {
-    background: #252525;
-    border-color: #4ecdc4;
-    box-shadow: 8px 8px 0 rgba(78, 205, 196, 0.2);
-    color: #4ecdc4;
-}
-
-.dark-mode .no-recipes {
-    background: #1e1e1e;
-    border-color: #333;
+    background: #121212;
+    border-color: #2a2a2a;
+    color: #888;
     box-shadow: 8px 8px 0 #000;
 }
 
-.dark-mode .no-recipes p {
-    color: #aaa;
+.dark-mode .add-new-card:hover {
+    background: #222;
+    border-color: #ffd93d;
+    border-style: solid;
+    box-shadow: 8px 8px 0 rgba(255, 217, 61, 0.2);
+    color: #ffd93d;
 }
 
-.dark-mode .profile-avatar {
+/* No Recipes */
+.dark-mode .no-recipes {
+    background: #121212;
     border-color: #2a2a2a;
     box-shadow: 8px 8px 0 #000;
 }
 
-.dark-mode .profile-avatar:hover {
-    box-shadow: 10px 10px 0 #ffd93d;
-    border-color: #ffd93d;
+.dark-mode .no-recipes p {
+    color: #888;
 }
 
+.dark-mode .start-sharing-button {
+    background: #121212;
+    color: #fff;
+    border-color: #2a2a2a;
+    box-shadow: 4px 4px 0 rgba(255, 217, 61, 0.3);
+}
+
+.dark-mode .start-sharing-button:hover {
+    background: #ffd93d;
+    color: #1a1a1a;
+    border-color: #ffd93d;
+    box-shadow: 6px 6px 0 #000;
+}
+
+/* Floating Recommendations */
 .dark-mode .floating-recommendations {
-    background: #1e1e1e;
-    border-color: #333;
+    background: #121212;
+    border-color: #2a2a2a;
     box-shadow: 8px 8px 0 #000;
 }
 
 .dark-mode .floating-recommendations:hover {
-    box-shadow: 12px 12px 0 #4ecdc4;
-    border-color: #4ecdc4;
-}
-
-.dark-mode .floating-header {
-    background: #000;
-    color: #4ecdc4;
-    /* Pop text */
-}
-
-/* Modal Dark Mode */
-.dark-mode .modal-content {
-    background: #1e1e1e;
+    box-shadow: 12px 12px 0 rgba(255, 217, 61, 0.2);
     border-color: #333;
 }
 
-.dark-mode .modal-header h2 {
+.dark-mode .floating-header {
+    background: #121212;
     color: #fff;
+    border-bottom: 1px solid #2a2a2a;
+}
+
+.dark-mode .drag-handle {
+    color: #888;
+}
+
+/* Modal */
+.dark-mode .modal-overlay {
+    background: rgba(0, 0, 0, 0.9);
+}
+
+.dark-mode .modal-content {
+    background: #121212;
+    border-color: #2a2a2a;
+}
+
+.dark-mode .modal-header {
+    border-bottom-color: #2a2a2a;
+}
+
+.dark-mode .modal-header h2 {
+    color: #ffffff;
 }
 
 .dark-mode .modal-close {
-    color: #aaa;
+    color: #888;
 }
 
 .dark-mode .modal-close:hover {
-    color: #fff;
+    color: #ffffff;
 }
 
 .dark-mode .form-group label {
-    color: #ddd;
+    color: #ffffff;
 }
 
 .dark-mode .form-group input {
-    background: #2a2a2a;
-    border-color: #444;
-    color: #fff;
+    background: #0f0f0f;
+    border-color: #2a2a2a;
+    color: #ffffff;
 }
 
 .dark-mode .form-group input:focus {
-    border-color: #4ecdc4;
-    box-shadow: 0 0 0 3px rgba(78, 205, 196, 0.2);
+    border-color: #ffd93d;
+    box-shadow: 0 0 0 3px rgba(255, 217, 61, 0.1);
+}
+
+.dark-mode .form-group input:disabled {
+    background-color: #121212;
+}
+
+.dark-mode .form-hint {
+    color: #888;
+}
+
+.dark-mode .password-form .error-message {
+    background-color: rgba(255, 107, 107, 0.1);
+    color: #ff6b6b;
+    border-left-color: #ff6b6b;
+}
+
+.dark-mode .password-form .success-message {
+    background-color: rgba(76, 175, 80, 0.1);
+    color: #4caf50;
+    border-left-color: #4caf50;
+}
+
+.dark-mode .submit-button {
+    background-color: #ffd93d;
+    color: #1a1a1a;
+}
+
+.dark-mode .submit-button:hover:not(:disabled) {
+    background-color: #ffed4e;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(255, 217, 61, 0.3);
+}
+
+.dark-mode .submit-button:disabled {
+    background-color: #2a2a2a;
+    color: #666;
+}
+
+/* Scrollbar */
+.dark-mode .recipes-grid::-webkit-scrollbar-track {
+    background: #121212;
+}
+
+.dark-mode .recipes-grid::-webkit-scrollbar-thumb {
+    background: #2a2a2a;
+    border-color: #121212;
+}
+
+.dark-mode .recipes-grid::-webkit-scrollbar-thumb:hover {
+    background: #ffd93d;
 }
