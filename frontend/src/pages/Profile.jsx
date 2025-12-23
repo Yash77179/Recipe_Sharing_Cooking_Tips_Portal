@@ -97,7 +97,6 @@ const Profile = () => {
             }
 
             const data = await response.json();
-            console.log('Profile Data:', data); // Debug log
 
             if (!response.ok) {
                 if (response.status === 401 || response.status === 404) {

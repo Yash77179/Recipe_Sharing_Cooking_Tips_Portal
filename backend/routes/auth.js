@@ -87,7 +87,6 @@ passport.use(new GoogleStrategy({
   async (accessToken, refreshToken, profile, done) => {
     try {
       const googleEmail = normalizeEmail(profile.emails[0].value);
-      console.log('Google Profile:', JSON.stringify(profile, null, 2)); // Debug log
 
       // Check if user exists with this Google ID
       let user = await User.findOne({ googleId: profile.id });
@@ -630,10 +629,6 @@ router.post('/set-password', [
       return res.status(404).json({ message: 'User not found' });
     }
 
-    console.log('📝 Before password update:');
-    console.log('  passwordSet:', user.passwordSet);
-    console.log('  hasPassword:', !!user.password);
-
     // Check if password is already set
     if (user.passwordSet && user.password) {
       return res.status(400).json({ message: 'Password already set. Use change password instead.' });
@@ -655,10 +650,6 @@ router.post('/set-password', [
       },
       { new: true, runValidators: false }
     );
-
-    console.log('✅ After update:');
-    console.log('  passwordSet:', user.passwordSet);
-    console.log('  hasPassword:', !!user.password);
 
     res.json({
       message: 'Password set successfully',
@@ -727,7 +718,6 @@ router.post('/upload-profile-picture', auth, (req, res) => {
 
 // Upload Banner Image
 router.post('/upload-banner', auth, (req, res) => {
-  console.log('Banner upload request received from user:', req.userId);
   upload.single('bannerImage')(req, res, async (err) => {
     try {
       // Handle multer errors
@@ -743,15 +733,11 @@ router.post('/upload-banner', auth, (req, res) => {
       }
 
       if (!req.file) {
-        console.log('No file in request');
         return res.status(400).json({ message: 'No file uploaded' });
       }
 
-      console.log('File received:', req.file.filename);
-
       const user = await User.findById(req.userId);
       if (!user) {
-        console.log('User not found:', req.userId);
         return res.status(404).json({ message: 'User not found' });
       }
 
@@ -760,7 +746,6 @@ router.post('/upload-banner', auth, (req, res) => {
         const oldBannerPath = path.join(__dirname, '../', user.bannerImage);
         if (fs.existsSync(oldBannerPath)) {
           fs.unlinkSync(oldBannerPath);
-          console.log('Deleted old banner:', oldBannerPath);
         }
       }
 
@@ -768,8 +753,6 @@ router.post('/upload-banner', auth, (req, res) => {
       const bannerUrl = `/uploads/profiles/${req.file.filename}`;
       user.bannerImage = bannerUrl;
       await user.save();
-
-      console.log('Banner uploaded successfully:', bannerUrl);
 
       res.json({
         message: 'Banner image uploaded successfully',
@@ -810,13 +793,6 @@ router.get('/google/callback',
     const host = req.get('host'); // e.g., 192.168.1.5:5001 or localhost:5001
     const frontendHost = host.replace('5001', '5173'); // Assume frontend is on 5173
     const frontendBaseUrl = `http://${frontendHost}`;
-
-    // Debug logging
-    console.log('🔐 Google OAuth Callback Debug:');
-    console.log('User:', req.user.email);
-    console.log('passwordSet:', req.user.passwordSet);
-    console.log('redirectTo:', redirectTo);
-    console.log('Redirecting to frontend:', frontendBaseUrl);
 
     // Redirect to frontend with token and redirectTo
     res.redirect(`${frontendBaseUrl}/auth/callback?token=${token}&redirectTo=${redirectTo}&user=${encodeURIComponent(JSON.stringify({

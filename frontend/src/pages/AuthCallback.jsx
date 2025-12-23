@@ -14,18 +14,9 @@ const AuthCallback = () => {
             const userParam = searchParams.get('user');
             const redirectTo = searchParams.get('redirectTo') || '/'; // Default to home
 
-            // Debug logging
-            console.log('🔍 AuthCallback Debug:');
-            console.log('token:', token ? 'received' : 'missing');
-            console.log('userParam:', userParam ? 'received' : 'missing');
-            console.log('redirectTo:', redirectTo);
-
             if (token && userParam) {
                 try {
                     const user = JSON.parse(decodeURIComponent(userParam));
-                    console.log('Parsed user:', user);
-                    console.log('User passwordSet:', user.passwordSet);
-                    console.log('Navigating to:', redirectTo);
                     
                     login(user, token);
                     
@@ -34,7 +25,6 @@ const AuthCallback = () => {
                         navigate(redirectTo, { replace: true });
                     }, 100);
                 } catch (error) {
-                    console.error('Error parsing user data:', error);
                     setError('Authentication failed. Please try again.');
                     setTimeout(() => {
                         navigate('/login', { replace: true });

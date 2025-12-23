@@ -14,25 +14,16 @@ const NavigationGuard = ({ children }) => {
         const allowedPaths = ['/set-password', '/auth/callback', '/login', '/signup'];
         const isAllowedPath = allowedPaths.some(path => location.pathname.startsWith(path));
 
-        console.log('🛡️ NavigationGuard Check:', {
-            path: location.pathname,
-            loggedIn: !!user,
-            passwordSet: user?.passwordSet,
-            isAllowedPath
-        });
-
         if (user) {
             // If user is logged in
             if (user.passwordSet === false) {
                 // Password NOT set
                 if (!isAllowedPath) {
-                    console.log('🔒 Redirecting to set-password');
                     navigate('/set-password', { replace: true });
                 }
             } else {
                 // Password IS set
                 if (location.pathname === '/set-password') {
-                    console.log('✅ Password already set, redirecting to home');
                     navigate('/', { replace: true });
                 }
             }
