@@ -36,6 +36,16 @@ const userSchema = new mongoose.Schema({
     enum: ['local', 'google'],
     default: 'local'
   },
+  isVerified: {
+    type: Boolean,
+    default: false
+  },
+  otp: {
+    type: String
+  },
+  otpExpires: {
+    type: Date
+  },
   favorites: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Recipe'

@@ -4,11 +4,21 @@ const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const { body, validationResult } = require('express-validator');
 const multer = require('multer');
+const nodemailer = require('nodemailer');
 const path = require('path');
 const fs = require('fs');
 const User = require('../models/User');
 const Recipe = require('../models/Recipe');
 const { auth, JWT_SECRET } = require('../middleware/auth');
+
+// Configure nodemailer
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS
+  }
+});
 
 const router = express.Router();
 
@@ -134,7 +144,8 @@ passport.use(new GoogleStrategy({
         googleId: profile.id,
         photo: profile.photos && profile.photos.length > 0 ? profile.photos[0].value : '',
         passwordSet: false,
-        authProvider: 'google'
+        authProvider: 'google',
+        isVerified: true // Google users are already verified
       });
 
       done(null, user);
@@ -157,7 +168,123 @@ passport.deserializeUser(async (id, done) => {
   }
 });
 
-// Signup Route
+// Send OTP Route
+router.post('/send-otp', [
+  body('email')
+    .trim()
+    .notEmpty().withMessage('Email is required')
+    .isEmail().withMessage('Please provide a valid email address')
+    .normalizeEmail()
+], async (req, res) => {
+  try {
+    const { name, email, password } = req.body;
+    const normalizedEmail = normalizeEmail(email);
+
+    // Check if verified user already exists
+    const existingUser = await User.findOne({ email: normalizedEmail, isVerified: true });
+    if (existingUser) {
+      return res.status(400).json({ message: 'User with this email already exists' });
+    }
+
+    // Generate 6-digit OTP
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+    const otpExpires = new Date(Date.now() + 10 * 60 * 1000); // 10 minutes
+
+    // Find or create unverified user
+    let user = await User.findOne({ email: normalizedEmail, isVerified: false });
+    if (user) {
+      user.name = name || user.name;
+      if (password) user.password = password;
+      user.otp = otp;
+      user.otpExpires = otpExpires;
+      user.markModified('password');
+    } else {
+      user = new User({
+        name,
+        email: normalizedEmail,
+        password,
+        otp,
+        otpExpires,
+        isVerified: false
+      });
+    }
+
+    await user.save();
+
+    // Send email
+    const mailOptions = {
+      from: process.env.EMAIL_USER,
+      to: normalizedEmail,
+      subject: 'Email Verification OTP - Recipe Sharing Portal',
+      html: `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e0e0e0; border-radius: 10px;">
+          <h2 style="color: #333; text-align: center;">Email Verification</h2>
+          <p>Hello <strong>${name}</strong>,</p>
+          <p>Thank you for signing up for the Recipe Sharing Portal. To complete your registration, please use the following One-Time Password (OTP):</p>
+          <div style="background-color: #f7f7f7; padding: 15px; border-radius: 5px; text-align: center; margin: 20px 0;">
+            <span style="font-size: 24px; font-weight: bold; letter-spacing: 5px; color: #d35400;">${otp}</span>
+          </div>
+          <p>This OTP is valid for 10 minutes. If you did not request this, please ignore this email.</p>
+          <hr style="border: none; border-top: 1px solid #eee; margin: 20px 0;">
+          <p style="font-size: 12px; color: #777; text-align: center;">&copy; 2024 Recipe Sharing Portal. Happy Cooking!</p>
+        </div>
+      `
+    };
+
+    await transporter.sendMail(mailOptions);
+
+    res.status(200).json({ message: 'OTP sent to your email' });
+  } catch (error) {
+    console.error('Send OTP error:', error);
+    res.status(500).json({ message: 'Error sending OTP: ' + error.message });
+  }
+});
+
+// Verify OTP Route
+router.post('/verify-otp', async (req, res) => {
+  try {
+    const { email, otp } = req.body;
+    const normalizedEmail = normalizeEmail(email);
+
+    const user = await User.findOne({
+      email: normalizedEmail,
+      otp,
+      otpExpires: { $gt: Date.now() }
+    });
+
+    if (!user) {
+      return res.status(400).json({ message: 'Invalid or expired OTP' });
+    }
+
+    // Mark as verified and clear OTP
+    user.isVerified = true;
+    user.otp = undefined;
+    user.otpExpires = undefined;
+    await user.save();
+
+    // Generate JWT token
+    const token = jwt.sign(
+      { userId: user._id, email: user.email },
+      JWT_SECRET,
+      { expiresIn: '7d' }
+    );
+
+    res.status(200).json({
+      message: 'Email verified successfully',
+      token,
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email
+      }
+    });
+  } catch (error) {
+    console.error('Verify OTP error:', error);
+    res.status(500).json({ message: 'Error verifying OTP' });
+  }
+});
+
+// Signup Route (Kept for compatibility, but could be redirected to send-otp)
 router.post('/signup', [
   // Validation rules
   body('name')
@@ -258,6 +385,11 @@ router.post('/login', [
     const user = await User.findOne({ email });
     if (!user) {
       return res.status(401).json({ message: 'Invalid email or password' });
+    }
+
+    // Check if user is verified
+    if (user.authProvider === 'local' && !user.isVerified) {
+      return res.status(403).json({ message: 'Please verify your email before logging in' });
     }
 
     // Check password
