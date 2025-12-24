@@ -81,12 +81,68 @@ const AddRecipe = () => {
         }
     };
 
-    const nextStep = () => setCurrentStep(prev => Math.min(prev + 1, 3));
-    const prevStep = () => setCurrentStep(prev => Math.max(prev - 1, 1));
+    const nextStep = () => {
+        setError('');
+        // Validate step 1 before moving forward
+        if (currentStep === 1) {
+            if (!formData.title.trim()) {
+                setError('Recipe title is required');
+                return;
+            }
+            if (formData.title.trim().length < 3) {
+                setError('Recipe title must be at least 3 characters');
+                return;
+            }
+            if (!formData.image.trim()) {
+                setError('Recipe image URL is required');
+                return;
+            }
+            // Basic URL validation
+            try {
+                new URL(formData.image);
+            } catch {
+                setError('Please provide a valid image URL');
+                return;
+            }
+            if (!formData.description.trim()) {
+                setError('Recipe description is required');
+                return;
+            }
+            if (formData.description.trim().length < 10) {
+                setError('Recipe description must be at least 10 characters');
+                return;
+            }
+        }
+        
+        setCurrentStep(prev => Math.min(prev + 1, 3));
+    };
+    
+    const prevStep = () => {
+        setError('');
+        setCurrentStep(prev => Math.max(prev - 1, 1));
+    };
 
     const handleSubmit = async () => {
         setLoading(true);
         setError('');
+        
+        // Validate required fields before submission
+        if (!formData.title.trim() || formData.title.trim().length < 3) {
+            setError('Recipe title is required and must be at least 3 characters');
+            setLoading(false);
+            return;
+        }
+        if (!formData.image.trim()) {
+            setError('Recipe image URL is required');
+            setLoading(false);
+            return;
+        }
+        if (!formData.description.trim() || formData.description.trim().length < 10) {
+            setError('Recipe description is required and must be at least 10 characters');
+            setLoading(false);
+            return;
+        }
+        
         const token = localStorage.getItem('token');
 
         const payload = {
@@ -109,7 +165,13 @@ const AddRecipe = () => {
             if (res.ok) {
                 navigate('/profile');
             } else {
-                setError(data.message || 'Failed to create recipe');
+                // Show detailed validation errors if available
+                if (data.errors && data.errors.length > 0) {
+                    const errorMessages = data.errors.map(err => `${err.field}: ${err.message}`).join('\n');
+                    setError(`Validation failed:\n${errorMessages}`);
+                } else {
+                    setError(data.message || 'Failed to create recipe');
+                }
             }
         } catch (err) {
             setError('Error connecting to server');

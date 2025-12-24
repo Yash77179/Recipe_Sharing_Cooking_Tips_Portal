@@ -96,6 +96,7 @@
     box-shadow: 4px 4px 0 rgba(204, 51, 51, 0.2);
     margin-bottom: 2rem;
     text-align: center;
+    white-space: pre-line; /* Preserve line breaks */
 }
 
 /* Step Content */
