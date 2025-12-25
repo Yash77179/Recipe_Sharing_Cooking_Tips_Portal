@@ -11,14 +11,26 @@ const User = require('../models/User');
 const Recipe = require('../models/Recipe');
 const { auth, JWT_SECRET } = require('../middleware/auth');
 
-// Configure nodemailer
+// Configure nodemailer with explicit settings for easier debugging
 const transporter = nodemailer.createTransport({
   host: 'smtp.gmail.com',
   port: 587,
-  secure: false, // Use STARTTLS
+  secure: false, // Use STARTTLS (usually better for cloud/Render)
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS
+  },
+  tls: {
+    rejectUnauthorized: false // Bypass SSL verification for cloud compatibility
+  }
+});
+
+// Verify connection configuration
+transporter.verify(function (error, success) {
+  if (error) {
+    console.log('Error verifying email transporter:', error);
+  } else {
+    console.log('Email Server is ready to take our messages');
   }
 });
 
