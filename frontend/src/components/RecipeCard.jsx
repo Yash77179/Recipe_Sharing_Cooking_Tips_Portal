@@ -153,7 +153,12 @@ const RecipeCard = ({ recipe, onToggle }) => {
                     </div>
 
                     <div className="card-content">
-                        <h3 className="card-title">{recipe.title}</h3>
+                        {/* Force truncate title to keep cards symmetrical */}
+                        <h3 className="recipe-title">
+                            {recipe.title.length > 22
+                                ? recipe.title.substring(0, 22) + "..."
+                                : recipe.title}
+                        </h3>
 
                         <div className="card-meta">
                             <span className="card-cuisine">{recipe.cuisine || 'CUISINE'}</span>
