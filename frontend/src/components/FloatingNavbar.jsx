@@ -201,44 +201,34 @@ const Cursor = ({ position }) => {
 const MobileMenu = ({ onClose }) => {
     const { user } = useAuth();
 
-    // Enhanced animation variants for the overlay
+    // "Circular Reveal" - Expands from the button position
     const menuVariants = {
         closed: {
-            opacity: 0,
-            scale: 0.95,
+            clipPath: `circle(0px at calc(100% - 40px) 40px)`,
             transition: {
-                duration: 0.3,
-                ease: "easeInOut",
-                when: "afterChildren"
+                type: "spring",
+                stiffness: 30, // Much softer closing (was 400)
+                damping: 15,
+                mass: 1
             }
         },
         open: {
-            opacity: 1,
-            scale: 1,
+            clipPath: `circle(150% at calc(100% - 40px) 40px)`,
             transition: {
-                duration: 0.4,
-                ease: [0.43, 0.13, 0.23, 0.96],
-                when: "beforeChildren",
-                staggerChildren: 0.08
+                type: "spring",
+                stiffness: 20,
+                damping: 15, // Increased damping slightly to prevent too much bounce
+                mass: 1.2
             }
         }
     };
 
-    // Animation variants for each menu item
-    const itemVariants = {
-        closed: {
-            opacity: 0,
-            x: -50,
-            scale: 0.9
-        },
+    const containerVariants = {
         open: {
-            opacity: 1,
-            x: 0,
-            scale: 1,
-            transition: {
-                duration: 0.5,
-                ease: [0.43, 0.13, 0.23, 0.96]
-            }
+            transition: { staggerChildren: 0.1, delayChildren: 0.2 }
+        },
+        closed: {
+            transition: { staggerChildren: 0.05, staggerDirection: -1 }
         }
     };
 
@@ -259,58 +249,115 @@ const MobileMenu = ({ onClose }) => {
             variants={menuVariants}
             className="mobile-menu-overlay"
         >
-            {/* --- Ambient Background Effects --- */}
-            <div className="mm-ambient-layer">
-                {/* Grain (CSS) */}
-                <div className="mm-grain"></div>
-                {/* Central Axis Line */}
-                <div className="mm-axis-line"></div>
-                {/* Central Glow */}
-                <div className="mm-glow"></div>
+            <div className="mm-split-axis"></div>
+
+            <div className="mm-nav-wrapper">
+                <motion.nav
+                    className="mm-nav-container"
+                    variants={containerVariants}
+                    initial="closed"
+                    animate="open"
+                    exit="closed"
+                >
+                    {links.map((link, index) => (
+                        <KineticLink
+                            key={link.path}
+                            link={link}
+                            index={index}
+                            onClose={onClose}
+                        />
+                    ))}
+                </motion.nav>
             </div>
 
-            {/* Close Button Removed - Handled by Main Toggle */}
-
-            {/* --- Main Navigation --- */}
-            <motion.nav
-                className="mm-nav-container"
+            <motion.div
+                className="mm-footer"
                 variants={{
-                    open: {
-                        transition: { staggerChildren: 0.08, delayChildren: 0.1 }
-                    }
+                    closed: { opacity: 0, y: 20 },
+                    open: { opacity: 1, y: 0, transition: { delay: 0.6 } }
                 }}
             >
-                {links.map((link, index) => (
-                    <motion.div
-                        key={link.path}
-                        className="mm-link-wrapper"
-                        variants={itemVariants}
-                    >
-                        <Link
-                            to={link.path}
-                            onClick={onClose}
-                            className="mm-link-group"
-                        >
-                            {/* Numbering */}
-                            <span className="mm-number">0{index + 1}</span>
-
-                            {/* Text */}
-                            <span className="mm-label">{link.label}</span>
-
-                            {/* Dot Reveal */}
-                            <span className="mm-dot"></span>
-                        </Link>
-                    </motion.div>
-                ))}
-            </motion.nav>
-
-            {/* --- Footer --- */}
-            <div className="mm-footer">
                 <div className="mm-socials">
-                    <a href="#" className="mm-social-link">Instagram</a>
-                    <a href="#" className="mm-social-link">Twitter</a>
-                    <a href="#" className="mm-social-link">Pinterest</a>
+                    {['Instagram', 'Twitter', 'Pinterest'].map((social, i) => (
+                        <motion.a
+                            key={social}
+                            href="#"
+                            className="mm-social-link"
+                            whileHover={{ y: -5, color: "#d4a373" }}
+                        >
+                            {social}
+                        </motion.a>
+                    ))}
                 </div>
+            </motion.div>
+        </motion.div>
+    );
+};
+
+const KineticLink = ({ link, index, onClose }) => {
+    return (
+        <motion.div
+            className="mm-link-row"
+            // Dramatic Entrance: Slide Up + Skew + Fade
+            variants={{
+                closed: { y: 40, skewY: 5, opacity: 0 },
+                open: {
+                    y: 0,
+                    skewY: 0,
+                    opacity: 1,
+                    transition: {
+                        type: "spring",
+                        stiffness: 80,
+                        damping: 12,
+                        mass: 0.8
+                    }
+                }
+            }}
+            whileHover="hover"
+        >
+            {/* Number - Slide In */}
+            <div className="mm-number-col">
+                <motion.span
+                    className="mm-number"
+                    variants={{
+                        hover: { x: 5, color: "#d4a373" }
+                    }}
+                    transition={{ duration: 0.2 }}
+                >
+                    0{index + 1}
+                </motion.span>
+            </div>
+
+            {/* Text - 3D Flip Effect */}
+            <div className="mm-text-col">
+                <Link
+                    to={link.path}
+                    onClick={onClose}
+                    className="mm-link-item-wrapper"
+                >
+                    <div className="mm-kinetic-text">
+                        <motion.span
+                            className="mm-text-layer primary"
+                            variants={{
+                                hover: { y: "-100%" },
+                                open: { y: "0%" }
+                            }}
+                            transition={{ duration: 0.5, ease: [0.33, 1, 0.68, 1] }} // Cubic Bezier for snap
+                        >
+                            {link.label}
+                        </motion.span>
+                        <motion.span
+                            className="mm-text-layer secondary"
+                            variants={{
+                                open: { y: "100%" },
+                                hover: { y: "0%" }
+                            }}
+                            transition={{ duration: 0.5, ease: [0.33, 1, 0.68, 1] }}
+                        >
+                            {link.label}
+                        </motion.span>
+                    </div>
+                </Link>
             </div>
         </motion.div>
     );

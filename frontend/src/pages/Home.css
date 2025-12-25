@@ -1316,11 +1316,19 @@ h3 {
     }
 
     .hero-visual {
-        height: 400px;
+        height: 350px;
+        margin-top: 6rem;
+        /* Restore spacing to avoid navbar overlap */
     }
 
     .hero-img {
-        height: 400px;
+        max-width: 85%;
+        height: 350px;
+        border-radius: 48% 52% 55% 45% / 52% 48% 52% 48%;
+        /* Gentle morph - stays closer to circle */
+        box-shadow: 10px 10px 0 rgba(0, 0, 0, 0.1);
+        animation: morph 8s ease-in-out infinite;
+        /* Keep the animation */
     }
 
     .hero-actions {
