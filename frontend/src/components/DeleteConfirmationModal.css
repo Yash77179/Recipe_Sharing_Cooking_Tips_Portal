@@ -1,0 +1,171 @@
+.delete-modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(5px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.delete-modal-content {
+    background: #fff;
+    border: 4px solid #1a1a1a;
+    width: 90%;
+    max-width: 450px;
+    padding: 0;
+    position: relative;
+    box-shadow: 15px 15px 0 #e53935;
+    /* Red shadow */
+    overflow: hidden;
+}
+
+.modal-stripe-pattern {
+    height: 15px;
+    background: repeating-linear-gradient(45deg,
+            #1a1a1a,
+            #1a1a1a 10px,
+            #ffd93d 10px,
+            #ffd93d 20px);
+    border-bottom: 4px solid #1a1a1a;
+}
+
+.modal-header {
+    padding: 20px 25px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    background: #fff;
+}
+
+.modal-warning-icon {
+    font-size: 2rem;
+    animation: bounce 0.5s infinite alternate;
+}
+
+@keyframes bounce {
+    from {
+        transform: translateY(0);
+    }
+
+    to {
+        transform: translateY(-5px);
+    }
+}
+
+.modal-header h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem;
+    font-weight: 900;
+    margin: 0;
+    text-transform: uppercase;
+    color: #1a1a1a;
+    text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.1);
+}
+
+.modal-body {
+    padding: 10px 25px 25px;
+    font-family: 'Inter', sans-serif;
+}
+
+.modal-body p {
+    font-size: 1.1rem;
+    margin-bottom: 10px;
+    line-height: 1.5;
+}
+
+.modal-subtext {
+    font-size: 0.9rem;
+    color: #666;
+    font-style: italic;
+}
+
+.modal-actions {
+    display: flex;
+    border-top: 4px solid #1a1a1a;
+}
+
+.modal-actions button {
+    flex: 1;
+    padding: 20px;
+    font-family: 'Lato', sans-serif;
+    font-weight: 900;
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s ease;
+}
+
+.btn-cancel {
+    background: #fff;
+    color: #1a1a1a;
+    border-right: 4px solid #1a1a1a;
+}
+
+.btn-cancel:hover {
+    background: #f0f0f0;
+}
+
+.btn-delete {
+    background: #e53935;
+    color: #fff;
+}
+
+.btn-delete:hover {
+    background: #c62828;
+    color: #ffebee;
+}
+
+/* Dark Mode Support */
+.dark-mode .delete-modal-content {
+    background: #1a1a1a;
+    border-color: #fff;
+    box-shadow: 15px 15px 0 #e53935;
+}
+
+.dark-mode .modal-stripe-pattern {
+    background: repeating-linear-gradient(45deg,
+            #fff,
+            #fff 10px,
+            #e53935 10px,
+            #e53935 20px);
+    border-color: #fff;
+}
+
+.dark-mode .modal-header {
+    background: #1a1a1a;
+    color: #fff;
+}
+
+.dark-mode .modal-header h2 {
+    color: #fff;
+    text-shadow: 2px 2px 0 #000;
+}
+
+.dark-mode .modal-body {
+    color: #e0e0e0;
+}
+
+.dark-mode .modal-subtext {
+    color: #aaa;
+}
+
+.dark-mode .modal-actions {
+    border-color: #fff;
+}
+
+.dark-mode .btn-cancel {
+    background: #1a1a1a;
+    color: #fff;
+    border-color: #fff;
+}
+
+.dark-mode .btn-cancel:hover {
+    background: #333;
+}

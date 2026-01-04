@@ -312,5 +312,25 @@ app.post('/api/recipes', [
   }
 });
 
+// DELETE recipe (protected route - owner only)
+app.delete('/api/recipes/:id', auth, async (req, res) => {
+  try {
+    const recipe = await Recipe.findById(req.params.id);
+    if (!recipe) {
+      return res.status(404).json({ message: 'Recipe not found' });
+    }
+
+    // Check ownership
+    if (recipe.userId.toString() !== req.userId) {
+      return res.status(403).json({ message: 'Not authorized to delete this recipe' });
+    }
+
+    await Recipe.deleteOne({ _id: req.params.id });
+    res.json({ message: 'Recipe removed' });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
 // Start Server
 app.listen(PORT, '0.0.0.0', () => console.log(`Server running on port ${PORT}`));
