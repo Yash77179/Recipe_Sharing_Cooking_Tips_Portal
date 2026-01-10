@@ -169,7 +169,7 @@ const Recipes = () => {
 
             <section className="recipes-section container">
                 <div className="section-header">
-                    <h2 className="section-title">Latest From The Kitchen</h2>
+                    <h2 className="section-title-no-line">Latest From The Kitchen</h2>
                     <div className="section-divider"></div>
                     {!loading && (
                         <p className="results-count">

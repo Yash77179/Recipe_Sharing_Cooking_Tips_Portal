@@ -434,7 +434,10 @@ router.post('/login', [
         name: user.name,
         email: user.email,
         favorites: user.favorites || [],
-        photo: user.photo
+        photo: user.photo,
+        bio: user.bio,
+        location: user.location,
+        website: user.website
       }
     });
   } catch (error) {
@@ -462,7 +465,10 @@ router.get('/profile', auth, async (req, res) => {
         createdAt: user.createdAt,
         favorites: user.favorites || [],
         photo: user.photo,
-        bannerImage: user.bannerImage
+        bannerImage: user.bannerImage,
+        bio: user.bio,
+        location: user.location,
+        website: user.website
       },
       recipes,
       recipeCount: recipes.length
@@ -530,7 +536,11 @@ router.get('/verify', auth, async (req, res) => {
         name: user.name,
         email: user.email,
         favorites: user.favorites || [],
-        photo: user.photo
+        favorites: user.favorites || [],
+        photo: user.photo,
+        bio: user.bio,
+        location: user.location,
+        website: user.website
       }
     });
   } catch (error) {
@@ -785,6 +795,66 @@ router.post('/upload-banner', auth, (req, res) => {
       res.status(500).json({ message: 'Error uploading banner image: ' + error.message });
     }
   });
+});
+
+// Update Profile Details Route
+router.put('/update-profile', [
+  auth,
+  body('name').trim().notEmpty().withMessage('Name cannot be empty'),
+  body('bio').optional().trim().isLength({ max: 500 }).withMessage('Bio must be less than 500 characters'),
+  body('location').optional().trim().isLength({ max: 100 }).withMessage('Location must be less than 100 characters'),
+  // specific check for website: allow empty string, or validate URL
+  body('website')
+    .optional({ checkFalsy: true }) // Skips validation if value is empty string, null, or undefined
+    .trim()
+    .isURL()
+    .withMessage('Please provide a valid URL')
+], async (req, res) => {
+  try {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({
+        message: 'Validation failed',
+        errors: errors.array().map(err => ({
+          field: err.path,
+          message: err.msg
+        }))
+      });
+    }
+
+    const { name, bio, location, website } = req.body;
+    const user = await User.findById(req.userId);
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Update fields if provided
+    if (name) user.name = name;
+    if (bio !== undefined) user.bio = bio;
+    if (location !== undefined) user.location = location;
+    if (website !== undefined) user.website = website;
+
+    await user.save();
+
+    res.json({
+      message: 'Profile updated successfully',
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        photo: user.photo,
+        bannerImage: user.bannerImage,
+        bio: user.bio,
+        location: user.location,
+        website: user.website,
+        favorites: user.favorites || []
+      }
+    });
+  } catch (error) {
+    console.error('Update profile error:', error);
+    res.status(500).json({ message: 'Error updating profile' });
+  }
 });
 
 // Google OAuth Routes

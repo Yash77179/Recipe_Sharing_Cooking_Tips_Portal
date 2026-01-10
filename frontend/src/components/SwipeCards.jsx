@@ -10,7 +10,7 @@ const SwipeCards = () => {
       {/* Section Header */}
       <div className="swipe-section-header">
         <span className="script-sub">Explore & Discover</span>
-        <h2 className="section-title">Swipe Through Deliciousness</h2>
+        <h2 className="section-title-no-line section-title-smaller">Swipe Through Deliciousness</h2>
       </div>
 
       {/* Cards Wrapper with Navigation */}

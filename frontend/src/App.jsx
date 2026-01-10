@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import { ThemeProvider } from './context/ThemeContext';
 import FloatingNavbar from './components/FloatingNavbar';
@@ -25,10 +25,12 @@ import WebsiteTour from './components/WebsiteTour';
 // Helper component to access AuthContext for conditional rendering
 const MainLayout = () => {
   const { user, loading } = useAuth();
+  const location = useLocation();
 
   // Don't show navbar if user is logged in but hasn't set password
   // Also wait for loading to finish to prevent flickering
-  const showNavbar = !loading && (!user || user.passwordSet !== false);
+  // Hide navbar on Profile page
+  const showNavbar = !loading && (!user || user.passwordSet !== false) && location.pathname !== '/profile' && location.pathname !== '/add';
 
   return (
     <NavigationGuard>

@@ -125,17 +125,19 @@
 /* Dark Mode Support */
 .dark-mode .delete-modal-content {
     background: #1a1a1a;
-    border-color: #fff;
-    box-shadow: 15px 15px 0 #e53935;
+    border-color: #ffd93d;
+    /* Yellow border */
+    box-shadow: 15px 15px 0 #990000;
+    /* Dark red shadow */
 }
 
 .dark-mode .modal-stripe-pattern {
     background: repeating-linear-gradient(45deg,
-            #fff,
-            #fff 10px,
+            #1a1a1a,
+            #1a1a1a 10px,
             #e53935 10px,
             #e53935 20px);
-    border-color: #fff;
+    border-color: #e53935;
 }
 
 .dark-mode .modal-header {
@@ -157,13 +159,13 @@
 }
 
 .dark-mode .modal-actions {
-    border-color: #fff;
+    border-color: #ffd93d;
 }
 
 .dark-mode .btn-cancel {
     background: #1a1a1a;
-    color: #fff;
-    border-color: #fff;
+    color: #e8e8e8;
+    border-right: 4px solid #ffd93d;
 }
 
 .dark-mode .btn-cancel:hover {

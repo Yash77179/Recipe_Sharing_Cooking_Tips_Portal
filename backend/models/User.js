@@ -61,6 +61,21 @@ const userSchema = new mongoose.Schema({
   bannerImage: {
     type: String,
     default: ''
+  },
+  bio: {
+    type: String,
+    default: '',
+    maxLength: 500
+  },
+  location: {
+    type: String,
+    default: '',
+    maxLength: 100
+  },
+  website: {
+    type: String,
+    default: '',
+    maxLength: 200
   }
 });
 

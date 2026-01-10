@@ -248,12 +248,12 @@
     stroke-width: 2.5px;
 }
 
-/* Dark Mode - Platinum & Gold Revival */
 .dark-mode .recipe-card {
     background: #1a1a1a;
-    border-color: #e0e0e0;
-    /* Platinum Border */
-    box-shadow: 8px 8px 0 rgba(224, 224, 224, 0.2);
+    border-color: #ffd93d;
+    /* Yellow Border */
+    box-shadow: 8px 8px 0 #000;
+    /* Black Shadow */
 }
 
 .dark-mode .recipe-card-container:hover .recipe-card {
@@ -278,7 +278,7 @@
 .dark-mode .card-cuisine {
     background: #d4af37;
     color: #000;
-    box-shadow: 2px 2px 0 #e0e0e0;
+    box-shadow: 2px 2px 0 #000;
 }
 
 .dark-mode .diet-text.veg {
@@ -296,30 +296,30 @@
 .dark-mode .time-tag {
     background: #d4af37;
     color: #000;
-    border-color: #e0e0e0;
-    box-shadow: 4px 4px 0 #e0e0e0;
+    border-color: #ffd93d;
+    box-shadow: 4px 4px 0 #000;
 }
 
 .dark-mode .favorite-btn {
     background: #1a1a1a;
-    border-color: #e0e0e0;
-    color: #e0e0e0;
-    box-shadow: 4px 4px 0 #e0e0e0;
+    border-color: #ffd93d;
+    color: #ffd93d;
+    box-shadow: 4px 4px 0 #000;
 }
 
 .dark-mode .favorite-btn:hover {
     background: #d4af37;
     border-color: #d4af37;
     color: #000;
-    box-shadow: 6px 6px 0 #e0e0e0;
+    box-shadow: 6px 6px 0 #b38b00;
 }
 
 /* Force RED for Active/Liked state in Dark Mode */
 .dark-mode .favorite-btn.active {
     background: #1a1a1a;
-    border-color: #e0e0e0;
+    border-color: #ffd93d;
     color: #ff6b6b;
-    box-shadow: 4px 4px 0 #e0e0e0;
+    box-shadow: 4px 4px 0 #000;
 }
 
 /* --- MOBILE RESPONSIVENESS (Reflow to Stack) --- */

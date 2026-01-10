@@ -164,7 +164,7 @@ const Home = () => {
             <section className="section-full-width">
                 <div className="section-header-center">
                     <span className="script-sub">Constant Inspiration</span>
-                    <h2 className="section-title">Discover New Flavors</h2>
+                    <h2 className="section-title-no-line">Discover New Flavors</h2>
                 </div>
 
                 <div className="carousel-container">
@@ -252,7 +252,7 @@ const Home = () => {
             <section className="home-categories">
                 <div className="section-header-center">
                     <span className="script-sub">Explore Global Flavors</span>
-                    <h2 className="section-title">Discover by Country</h2>
+                    <h2 className="section-title-no-line">Discover by Country</h2>
                 </div>
                 <CountryNavigation />
             </section>
