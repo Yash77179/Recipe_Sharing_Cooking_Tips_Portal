@@ -30,7 +30,7 @@
     background: #fff;
     border: 3px solid #1a1a1a;
     margin-bottom: 2.5rem;
-    margin-top: -3.5rem;
+    margin-top: -0.5rem;
     position: relative;
     box-shadow: 8px 8px 0 #1a1a1a;
     /* Brutalist Shadow */
@@ -152,6 +152,19 @@
 
     100% {
         transform: translateX(-33.33%);
+    }
+}
+
+/* Responsive margin adjustments for kitchen header */
+@media (max-width: 768px) {
+    .kitchen-header {
+        margin-top: -3.5rem;
+    }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+    .kitchen-header {
+        margin-top: -2rem;
     }
 }
 
